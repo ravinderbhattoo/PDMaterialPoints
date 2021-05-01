@@ -16,8 +16,9 @@ Abstact function for creating **Shape** objects.
     - volume : Volume per particle point 
 
 """
-function create(shape::T) where T <: Shape
-    error("Not implemented yet.")
+function create(shape::T; resolution=nothing, rand_=0.0) where T <: Shape
+    error("Not implemented for type **$(typeof(shape))** yet.")
 end 
 
 include("./cuboid.jl")
+include("./sphere.jl")

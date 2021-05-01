@@ -25,10 +25,10 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0)
     for I in R
         I_ = Tuple(I)
         for i in eachindex(I_)
-            mesh[i, a] = (I_[i] + rand_*rand())*lattice[i]
+            mesh[i, a] = c.bounds[i, 1] - lattice[i]/2 + (I_[i] + rand_*rand())*lattice[i]
         end
         a += 1
     end
     # x, v, y, vol
-    return mesh, zeros(size(mesh)), copy(mesh), ones(prod(N))
+    return mesh, zeros(size(mesh)), copy(mesh), ones(prod(N))*prod(lattice)
 end
