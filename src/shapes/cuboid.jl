@@ -12,7 +12,7 @@ function Base.show(io::IO, x::Cuboid)
     end
 end
 
-function create(c::Cuboid; resolution=nothing, rand_=0.0)
+function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
     if isa(resolution, Nothing)
         N = [10 for i in 1:size(c.bounds)[1]]
     else
@@ -25,10 +25,10 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0)
     for I in R
         I_ = Tuple(I)
         for i in eachindex(I_)
-            mesh[i, a] = c.bounds[i, 1] - lattice[i]/2 + (I_[i] + rand_*rand())*lattice[i]
+            mesh[i, a] = c.bounds[i, 1] - lattice[i]/2 + (I_[i] + rand_*randn())*lattice[i]
         end
         a += 1
     end
     # x, v, y, vol
-    return mesh, zeros(size(mesh)), copy(mesh), ones(prod(N))*prod(lattice)
+    return mesh, zeros(size(mesh)), copy(mesh), ones(prod(N))*prod(lattice), type*ones(Int64, prod(N)) 
 end

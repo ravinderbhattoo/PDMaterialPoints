@@ -1,6 +1,6 @@
 export write_data
 
-function write_data(filename::String, x::Array{Float64,2}, vol::Array{Float64,1}, type::Array{T,1}) where T 
+function write_data(filename::String, x::Array{Float64,2}, type::Array{T,1},  vol::Array{Float64,1}) where T 
     file = open(filename, "w+")
     N = size(x, 2)
     write(file, "$N \n\n")
