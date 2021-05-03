@@ -1,18 +1,21 @@
 export delete
 
-function delete(x::Array{Float64,2}, type, func::Function)
-    mask = vec(func(x)) .== false
-    return x[:, mask], type[mask]
+function delete(out, mask)
+    return out[1][:, mask], out[2][:, mask], out[3][:, mask], out[4][mask], out[5][mask]
 end
 
 function delete(obj::T, f::Function) where T <: Union{Shape, PostOpObj}
-    function func(x::Array{Float64,2}, type)
-        return delete(x, type, f)
+    # x, v, y, vol, type
+    function func(out)
+        mask = vec(f(out)) .== false
+        out = delete(out, mask) 
+        return out
     end
     if isa(obj, Shape)
         return PostOpObj(obj, [func])
     elseif isa(obj, PostOpObj)
-        return push!(PostOpObj.operations, func)         
+        push!(obj.operations, func)       
+        return obj         
     else
         error("Not allowed.")
     end

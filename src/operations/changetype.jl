@@ -1,14 +1,16 @@
 export changetype
 
-function changetype(x::Array{Float64,2}, type::Array{Int64,1}, func::Function, ntype::Int64)
-    mask = vec(func(x))
+function changetype(type::Array{Int64,1}, mask, ntype::Int64)
     type[mask] .= ntype
-    return x, type
+    return type
 end
 
 function changetype(obj::T, f::Function, ntype::Int64) where T <: Union{Shape, PostOpObj}
-    function func(x::Array{Float64,2}, type)
-        return changetype(x, type, f, ntype)
+    # x, v, y, vol, type
+    function func(out)
+        mask = vec(f(out))
+        type = changetype(out[5], mask, ntype)
+        return out[1:4]..., type
     end
     if isa(obj, Shape)
         return PostOpObj(obj, [func])

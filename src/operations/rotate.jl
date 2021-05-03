@@ -16,13 +16,17 @@ function rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[
 end
 
 function rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
-    function func(x::Array{Float64,2}, type)
-        return rotate(x; angle=angle, point=point, vector_=vector_), type
+    # x, v, y, vol, type
+    function func(out)
+        x = out[1]
+        x = rotate(x; angle=angle, point=point, vector_=vector_)
+        return x, out[2], copy(x), out[4:end]...
     end
     if isa(obj, Shape)
         return PostOpObj(obj, [func])
     elseif isa(obj, PostOpObj)
-        return push!(PostOpObj.operations, func)         
+        push!(obj.operations, func)       
+        return obj         
     else
         error("Not allowed.")
     end
