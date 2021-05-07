@@ -19,7 +19,7 @@ function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
         return out[1], velocity(v, mask, vel), out[3:end]...
     end
     if isa(obj, Shape)
-        return PostOpObj(obj, [func])
+        return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)       
         return obj 

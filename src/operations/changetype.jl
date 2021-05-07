@@ -13,7 +13,7 @@ function changetype(obj::T, f::Function, ntype::Int64) where T <: Union{Shape, P
         return out[1:4]..., type
     end
     if isa(obj, Shape)
-        return PostOpObj(obj, [func])
+        return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)
         return obj         

@@ -1,6 +1,11 @@
 export write_data
 
-function write_data(filename::String, x::Array{Float64,2}, type::Array{T,1},  vol::Array{Float64,1}) where T 
+function write_data(filename::String, args...)
+    error("Please check function signature. \n $(methods(write_data)))")
+end
+
+
+function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Vector)
     file = open(filename, "w+")
     N = size(x, 2)
     write(file, "$N \n\n")
@@ -14,7 +19,7 @@ function write_data(filename::String, x::Array{Float64,2}, type::Array{T,1},  vo
     close(file)
 end
 
-function write_data(filename::String, x::Array{Float64,2}, v::Array{Float64,2}, type::Array{T,1},  vol::Array{Float64,1}) where T 
+function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)  
     file = open(filename, "w+")
     N = size(x, 2)
     write(file, "$N \n\n")
@@ -23,7 +28,7 @@ function write_data(filename::String, x::Array{Float64,2}, v::Array{Float64,2}, 
         vol_ = vol[j]
         a,b,c = x[:, j]
         d,e,f = v[:, j]
-        write(file, "$a, $b, $c, $d, $e, $f, $t, $vol_ ")
+        write(file, "$t, $a, $b, $c, $d, $e, $f, $vol_")
         write(file,"\n")
     end
     close(file)

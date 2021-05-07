@@ -23,7 +23,7 @@ function rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0
         return x, out[2], copy(x), out[4:end]...
     end
     if isa(obj, Shape)
-        return PostOpObj(obj, [func])
+        return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)       
         return obj         
