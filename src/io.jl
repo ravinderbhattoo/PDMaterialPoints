@@ -19,6 +19,12 @@ function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Ve
     close(file)
 end
 
+function write_data(filename::String, obj::Union{Shape,PostOpObj}; kwargs...)
+    out = create(obj; kwargs...)
+    write_data(filename, out[:x], out[:v], out[:type], out[:volume])
+end
+
+
 function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)  
     file = open(filename, "w+")
     N = size(x, 2)
@@ -28,7 +34,7 @@ function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::
         vol_ = vol[j]
         a,b,c = x[:, j]
         d,e,f = v[:, j]
-        write(file, "$t, $a, $b, $c, $d, $e, $f, $vol_")
+        write(file, "$j $t, $a, $b, $c, $d, $e, $f, $vol_")
         write(file,"\n")
     end
     close(file)
