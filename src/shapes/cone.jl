@@ -21,6 +21,5 @@ function create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
 
     mask = vec(sum(X.^2, dims=1) .<= ((length_ .- z)./length_.*radius).^2)
     mesh = x[:, mask]
-    # x, v, y, vol
-    return mesh, zeros(size(mesh)), copy(mesh), vol[mask], type*ones(Int64, sum(mask)) 
+    return Dict(:x => mesh, :v => zeros(size(mesh)), :y => copy(mesh), :volume => vol[mask], :type => type*ones(Int64, sum(mask))) 
 end

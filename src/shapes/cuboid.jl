@@ -29,6 +29,11 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
         end
         a += 1
     end
-    # x, v, y, vol, type
-    return mesh, zeros(size(mesh)), copy(mesh), ones(prod(N))*prod(lattice), type*ones(Int64, prod(N)) 
+    return Dict(
+        :x => mesh, 
+        :v => zeros(size(mesh)), 
+        :y => copy(mesh), 
+        :volume => ones(prod(N))*prod(lattice), 
+        :type => type*ones(Int64, prod(N)) 
+        ) 
 end

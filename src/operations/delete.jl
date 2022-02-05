@@ -1,17 +1,19 @@
-function Base.delete!(out, mask::BitArray)
-    return out[1][:, mask], out[2][:, mask], out[3][:, mask], out[4][mask], out[5][mask]
+export delete
+
+function delete(out, mask::BitArray)
+    return repack(out[:x][:, mask], out[:v][:, mask], out[:y][:, mask], out[:volume][mask], out[:type][mask])
 end
 
 """
-    Base.delete!(obj::T, f::Function) where T
+    delete!(obj::T, f::Function) where T
 
 Delete mesh particle for object using boolean array from function f.
 """
-function Base.delete!(obj::T, f::Function) where T  
+function delete(obj::T, f::Function) where T  
     # x, v, y, vol, type
     function func(out)
         mask = vec(f(out)) .== false
-        out = Base.delete!(out, mask) 
+        out = delete(out, mask) 
         return out
     end
     if isa(obj, Shape)

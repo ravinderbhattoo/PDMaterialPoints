@@ -1,8 +1,13 @@
 # exports
-export create, Sphere, show
+export create, Sphere, show, Shell
 
 mutable struct Sphere <: Shape
     radius::Float64
+end
+
+mutable struct Shell <: Shape
+    outer_radius::Float64
+    inner_radius::Float64
 end
 
 function Base.show(io::IO, x::Sphere)
@@ -16,6 +21,11 @@ function create(c::Sphere; resolution=nothing, rand_=0.0, type::Int64=1)
     x, v, y, vol = create(Cuboid(bounds), resolution=resolution, rand_=rand_)
     mask = vec(sum(x.^2, dims=1) .<= radius^2)
     mesh = x[:, mask]
-    # x, v, y, vol
-    return mesh, zeros(size(mesh)), copy(mesh), vol, id*ones(Int64, length(vol))
+    return Dict(
+        :x => mesh, 
+        :v => zeros(size(mesh)), 
+        :y => copy(mesh), 
+        :volume => vol, 
+        :type => id*ones(Int64, length(vol))
+    )
 end

@@ -6,7 +6,7 @@ using PDMesh
 obj = Cuboid([-10 10; 0 3; -2 2])
 
 f = out -> begin 
-x=out[1]; 
+x=out[:x]; 
 mask = (x[1, :] .< 0.1) .& (x[1, :] .> -0.1) .& (x[2, :] .> 2)
 mask
 end

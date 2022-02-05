@@ -9,8 +9,8 @@ function changetype(obj::T, f::Function, ntype::Int64) where T <: Union{Shape, P
     # x, v, y, vol, type
     function func(out)
         mask = vec(f(out))
-        type = changetype(out[5], mask, ntype)
-        return out[1:4]..., type
+        type = changetype(out[:type], mask, ntype)
+        return repack!(out, [:type], [type])
     end
     if isa(obj, Shape)
         return PostOpObj(obj, func)

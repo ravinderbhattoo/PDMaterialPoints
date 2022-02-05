@@ -1,6 +1,6 @@
 # Exports
 
-export Shape, PostOpObj, create, combine
+export Shape, PostOpObj, create, combine, unpack, repack, repack!
 
 abstract type Shape end
 
@@ -68,6 +68,30 @@ end
 
 function combine(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
     PostOpObj([obj1, obj2], []) 
+end
+
+
+function unpack(d::Dict)
+    return d[:x], d[:v], d[:y], d[:volume], d[:type]
+end
+
+function repack(args...; keys_ = (:x, :v, :y, :volume, :type))
+    d = Dict()
+    for i in 1:5
+        d[keys_[i]] = args[i]
+    end
+    d
+end
+
+function repack!(d::Dict, keys_, vals)
+    if length(keys_)==length(vals)
+        for i in 1:length(vals)
+            d[keys_[i]] = vals[i]
+        end
+    else
+        error("Lengths are not same.")
+    end
+    d
 end
 
 
