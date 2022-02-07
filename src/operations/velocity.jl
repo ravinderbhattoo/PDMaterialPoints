@@ -14,12 +14,12 @@ end
 function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
     # x, v, y, vol, type
     function func(out)
-        v = out[2]
+        v = out[:v]
         mask = vec(f(out))
-        return out[1], velocity(v, mask, vel), out[3:end]...
+        return repack!(out, [:v], [v])
     end
     if isa(obj, Shape)
-        return PostOpObj(obj, [func])
+        return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)       
         return obj 

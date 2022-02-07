@@ -1,10 +1,15 @@
 export delete
 
-function delete(out, mask)
-    return out[1][:, mask], out[2][:, mask], out[3][:, mask], out[4][mask], out[5][mask]
+function delete(out, mask::BitArray)
+    return repack(out[:x][:, mask], out[:v][:, mask], out[:y][:, mask], out[:volume][mask], out[:type][mask])
 end
 
-function delete(obj::T, f::Function) where T <: Union{Shape, PostOpObj}
+"""
+    delete!(obj::T, f::Function) where T
+
+Delete mesh particle for object using boolean array from function f.
+"""
+function delete(obj::T, f::Function) where T  
     # x, v, y, vol, type
     function func(out)
         mask = vec(f(out)) .== false
@@ -12,7 +17,7 @@ function delete(obj::T, f::Function) where T <: Union{Shape, PostOpObj}
         return out
     end
     if isa(obj, Shape)
-        return PostOpObj(obj, [func])
+        return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)       
         return obj         

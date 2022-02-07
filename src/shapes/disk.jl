@@ -54,5 +54,11 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
         end
     end
     mesh = hcat(mesh...)
-    return mesh, zeros(size(mesh)), copy(mesh), vol, type*ones(Int64, length(vol)) 
+    return Dict(
+        :x => mesh, 
+        :v => zeros(size(mesh)), 
+        :y => copy(mesh), 
+        :volume => vol, 
+        :type => type*ones(Int64, length(vol)),
+    ) 
 end
