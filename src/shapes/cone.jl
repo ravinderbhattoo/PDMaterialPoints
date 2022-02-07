@@ -27,7 +27,7 @@ end
 function create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
     radius = c.radius
     length_ = c.length
-    x, v, y, vol = create(Disk(radius, length_), resolution=resolution, rand_=rand_)
+    x, v, y, vol, type_ = unpack(create(Disk(radius, length_), resolution=resolution, rand_=rand_))
     X = @view x[1:2, :]
     z = @view x[3:3, :]
 

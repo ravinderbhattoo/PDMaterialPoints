@@ -18,7 +18,7 @@ end
 function create(c::Sphere; resolution=nothing, rand_=0.0, type::Int64=1)
     radius = c.radius
     bounds = [-radius radius; -radius radius; -radius radius]
-    x, v, y, vol = create(Cuboid(bounds), resolution=resolution, rand_=rand_)
+    x, v, y, vol, type_ = unpack(create(Cuboid(bounds), resolution=resolution, rand_=rand_))
     mask = vec(sum(x.^2, dims=1) .<= radius^2)
     mesh = x[:, mask]
     return Dict(
