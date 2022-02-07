@@ -1,6 +1,18 @@
 # exports
 export create, Cone, show
 
+"""
+    Cone
+
+Shape object of cone.
+
+## Args
+    - radius : radius of cone
+    - length : length of cone
+
+## Returns
+    - obj : Shape object **Cone**.
+"""
 mutable struct Cone <: Shape
     radius::Float64
     length::Float64
