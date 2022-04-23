@@ -63,6 +63,7 @@ function create(pobj::PostOpObj, args...; kwargs...)
     for func in pobj.operations
         out = func(out)
     end
+    out[:y] .= out[:x]
     return out
 end
 
