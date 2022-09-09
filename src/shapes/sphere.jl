@@ -18,14 +18,18 @@ end
 function create(c::Sphere; resolution=nothing, rand_=0.0, type::Int64=1)
     radius = c.radius
     bounds = [-radius radius; -radius radius; -radius radius]
-    x, v, y, vol, type_ = unpack(create(Cuboid(bounds), resolution=resolution, rand_=rand_))
+    x, v, y, vol, type_ = unpack(create(Cuboid(bounds), resolution=resolution, rand_=rand_, type=type))
     mask = vec(sum(x.^2, dims=1) .<= radius^2)
+
     mesh = x[:, mask]
+    vol = vol[mask]
+    type_ = type_[mask]
+
     return Dict(
-        :x => mesh, 
-        :v => zeros(size(mesh)), 
-        :y => copy(mesh), 
-        :volume => vol, 
-        :type => id*ones(Int64, length(vol))
+        :x => mesh,
+        :v => zeros(size(mesh)),
+        :y => copy(mesh),
+        :volume => vol,
+        :type => type_
     )
 end
