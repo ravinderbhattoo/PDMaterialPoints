@@ -26,10 +26,11 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
     mesh = Vector{Float64}[]
     vol = Float64[]
     total_vol = 0
+
     for i in 1:nm_thickness
-        z = (i - 0.5)*et_size 
+        z = (i - 0.5)*et_size
         total_vol += et_size*pi*e_size^2
-        push!(mesh, [0, 0.0, z + rand_*randn()*et_size]) 
+        push!(mesh, [0, 0.0, z + rand_*randn()*et_size])
         push!(vol, et_size*pi*e_size^2)
         for j in 1:nm_radial_ele
             r_in = e_size/2 + (j-1) * er_size
@@ -53,12 +54,14 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
             end
         end
     end
+
     mesh = hcat(mesh...)
+
     return Dict(
-        :x => mesh, 
-        :v => zeros(size(mesh)), 
-        :y => copy(mesh), 
-        :volume => vol, 
+        :x => mesh,
+        :v => zeros(size(mesh)),
+        :y => copy(mesh),
+        :volume => vol,
         :type => type*ones(Int64, length(vol)),
-    ) 
+    )
 end

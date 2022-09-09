@@ -5,7 +5,7 @@ function delete(out, mask::BitArray)
 end
 
 """
-    delete!(obj::T, f::Function) where T
+    delete(obj::T, f::Function) where T
 
 Delete mesh particle for object using boolean array from function f.
 """

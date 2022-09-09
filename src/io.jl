@@ -1,9 +1,14 @@
 export write_data
 
-function write_data(filename::String, args...)
-    error("Please check function signature. \n $(methods(write_data)))")
+function write_data(filename::String, args...; kwargs...)
+    objs = sum(args...)
+    write_data(filename, objs; kwargs...)
 end
 
+function write_data(filename::String, obj::Union{Shape,PostOpObj}; kwargs...)
+    out = create(obj; kwargs...)
+    write_data(filename, out[:x], out[:v], out[:type], out[:volume])
+end
 
 function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Vector)
     file = open(filename, "w+")
@@ -19,13 +24,7 @@ function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Ve
     close(file)
 end
 
-function write_data(filename::String, obj::Union{Shape,PostOpObj}; kwargs...)
-    out = create(obj; kwargs...)
-    write_data(filename, out[:x], out[:v], out[:type], out[:volume])
-end
-
-
-function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)  
+function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)
     file = open(filename, "w+")
     N = size(x, 2)
     write(file, "$N \n\n")

@@ -4,10 +4,10 @@ export Shape, PostOpObj, create, combine, unpack, repack, repack!
 
 abstract type Shape end
 
-mutable struct PostOpObj 
+mutable struct PostOpObj
     objs::Vector{Any}
     operations::Array{Function}
-    function PostOpObj(obj, func) 
+    function PostOpObj(obj, func)
         if ~isa(obj, Vector)
             obj = [obj]
         end
@@ -15,7 +15,7 @@ mutable struct PostOpObj
                 func = [func]
         end
         new(obj, func)
-    end    
+    end
 end
 
 function Base.copy(x::T) where T<:Union{Shape, PostOpObj}
@@ -30,16 +30,16 @@ end
 Abstact function for creating **Shape** objects.
 
 ## Returns
-    - X : Initial reference position 
-    - V : Initial velocity 
-    - Y : Initial position 
-    - volume : Volume per particle point 
+    - X : Initial reference position
+    - V : Initial velocity
+    - Y : Initial position
+    - volume : Volume per particle point
     - type: Type of particle point
 
 """
 function create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
     error("Not implemented for type **$(typeof(shape))** yet.")
-end 
+end
 
 function mycat(a, b)
     if length(size(a))==1
@@ -57,7 +57,9 @@ function create(pobj::PostOpObj, args...; kwargs...)
         if isa(out, Nothing)
             out = temp
         else
-            out = mycat.(out, temp)
+            for (key, val) in out
+                out[key] = mycat(out[key], temp[key])
+            end
         end
     end
     for func in pobj.operations
@@ -67,8 +69,24 @@ function create(pobj::PostOpObj, args...; kwargs...)
     return out
 end
 
-function combine(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
-    PostOpObj([obj1, obj2], []) 
+function Base.:+(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+    PostOpObj([obj1, obj2], [])
+end
+
+function Base.:+(obj1::T1, obj2::Nothing) where {T1<:Union{Shape, PostOpObj}}
+    PostOpObj([obj1], [])
+end
+
+function add(obj1, obj2)
+    obj1 + obj2
+end
+
+function combine(obj1, obj2)
+    obj1 + obj2
+end
+
+function Base.:+(obj1::Nothing, obj2::T1) where {T1<:Union{Shape, PostOpObj}}
+    obj2 + obj1
 end
 
 
