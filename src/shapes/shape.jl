@@ -2,9 +2,22 @@
 
 export Shape, PostOpObj, create, combine, unpack, repack, repack!
 
+"""
+    Shape
+    Abstarct shape object.
+"""
 abstract type Shape end
 
-mutable struct PostOpObj
+"""
+    PostOpObj
+
+Create a post operation object (lazy) from object ( or post operation object) 
+and an operation. Operations will be applied while a create call.
+    
+## Returns
+    - obj : Post operation object (lazy)
+"""
+mutable struct PostOpObj 
     objs::Vector{Any}
     operations::Array{Function}
     function PostOpObj(obj, func)
@@ -30,11 +43,11 @@ end
 Abstact function for creating **Shape** objects.
 
 ## Returns
-    - X : Initial reference position
-    - V : Initial velocity
-    - Y : Initial position
-    - volume : Volume per particle point
-    - type: Type of particle point
+    - X : Initial reference position 
+    - V : Initial velocity 
+    - Y : Initial position 
+    - volume : Volume per particle point 
+    - type : Type of particle point
 
 """
 function create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
