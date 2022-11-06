@@ -4,7 +4,7 @@ using Documenter, DocThemeIndigo, PDMesh
 
 indigo = DocThemeIndigo.install(PDMesh)
 
-makedocs(sitename="PDMesh.jl";
+makedocs(sitename="PDMesh";
     build="../docs",
     sidebar_sitename=nothing,
     format = Documenter.HTML(
@@ -13,10 +13,10 @@ makedocs(sitename="PDMesh.jl";
     ),
     modules=[PDMesh],
     pages = [
-        "Home" => "pdmesh.md",
+        "Home" => "index.md",
         "Table of contents" => "toc.md",
         "Examples" => "examples.md",
-        "Index" => "index.md",
+        "Index" => "list.md",
         "Shapes" => "shapes.md",
         "Autodocs" => "autodocs.md"
     ]
