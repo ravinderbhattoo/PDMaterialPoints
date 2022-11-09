@@ -5,6 +5,11 @@ function move(x::Array{Float64,2}; by=[0.0, 0.0, 0.0])
     return x
 end
 
+"""
+    move(obj::T; by=[0.0, 0.0, 0.0]) where T
+
+Move mesh particles for object by given "by".
+"""
 function move(obj::T; by=[0.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
     # x, v, y, vol, type
     function func(out)
@@ -15,8 +20,8 @@ function move(obj::T; by=[0.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
     if isa(obj, Shape)
         return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)       
-        return obj 
+        push!(obj.operations, func)
+        return obj
     else
         error("Not allowed.")
     end

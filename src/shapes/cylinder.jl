@@ -1,6 +1,19 @@
 # exports
 export create, Cylinder, show
 
+"""
+    Cylinder
+
+Shape object of  type cylinder.
+
+## Args
+    - radius : radius of cylinder
+    - thickness : thickness of the wall of cylinder
+    - length : length of cylinder
+
+## Returns
+    - obj : Shape object **Cylinder**.
+"""
 mutable struct Cylinder <: Shape
     radius1::Float64
     thickness::Float64

@@ -23,4 +23,5 @@ deps/src/
 # environment.
 Manifest.toml
 
+output
 *.data

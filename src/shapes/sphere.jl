@@ -1,6 +1,17 @@
 # exports
 export create, Sphere, show, Shell
 
+"""
+    Sphere
+
+Shape object of  type sphere.
+
+## Args
+    - radius : radius of sphere
+
+## Returns
+    - obj : Shape object **sphere**.
+"""
 mutable struct Sphere <: Shape
     radius::Float64
 end

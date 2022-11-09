@@ -1,6 +1,18 @@
 # exports
 export create, Disk, show
 
+"""
+    Disk
+
+Shape object of  type disk.
+
+## Args
+    - radius : radius of disk
+    - thickness : length of disk
+
+## Returns
+    - obj : Shape object **disk**.
+"""
 mutable struct Disk <: Shape
     radius::Float64
     thickness::Float64
