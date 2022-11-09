@@ -15,6 +15,13 @@ function rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[
     return x
 end
 
+
+
+"""
+    rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
+
+Rotate shape object by given angle about given vector and point.
+"""
 function rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
     # x, v, y, vol, type
     function func(out)
@@ -25,8 +32,8 @@ function rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0
     if isa(obj, Shape)
         return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)       
-        return obj         
+        push!(obj.operations, func)
+        return obj
     else
         error("Not allowed.")
     end

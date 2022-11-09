@@ -1,6 +1,17 @@
 # exports
 export create, Cuboid, show
 
+"""
+    Cuboid
+
+Shape object of  type cuboid.
+
+## Args
+    - bounds : min, max of cuboid for e.g. [-10 10; 0 3; -2 2]
+
+## Returns
+    - obj : Shape object **Cuboid**.
+"""
 mutable struct Cuboid <: Shape
     bounds::Array{Float64, 2}
 end

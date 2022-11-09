@@ -11,6 +11,11 @@ function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,2})
     return v
 end
 
+"""
+    velocity(obj::T, f::Function, vel) where T
+
+Change velocity of particles for object using boolean array from function f.
+"""
 function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
     # x, v, y, vol, type
     function func(out)
@@ -21,8 +26,8 @@ function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
     if isa(obj, Shape)
         return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)       
-        return obj 
+        push!(obj.operations, func)
+        return obj
     else
         error("Not allowed.")
     end

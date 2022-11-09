@@ -5,6 +5,11 @@ function changetype(type::Array{Int64,1}, mask, ntype::Int64)
     return type
 end
 
+"""
+    changetype(obj::T, f::Function, ntype::Int64) where T
+
+Change mesh particle type for object using boolean array from function f.
+"""
 function changetype(obj::T, f::Function, ntype::Int64) where T <: Union{Shape, PostOpObj}
     # x, v, y, vol, type
     function func(out)
@@ -16,7 +21,7 @@ function changetype(obj::T, f::Function, ntype::Int64) where T <: Union{Shape, P
         return PostOpObj(obj, func)
     elseif isa(obj, PostOpObj)
         push!(obj.operations, func)
-        return obj         
+        return obj
     else
         error("Not allowed.")
     end
