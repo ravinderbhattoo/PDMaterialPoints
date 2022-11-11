@@ -2,29 +2,32 @@ module PDMesh
 using CUDA
 # Write your package code here.
 
-const IF_CUDA = Ref{Bool}(false)
+const DEVICE = Ref{Symbol}(:cpu)
 
-function set_cuda(x)
-    function fn()
-        IF_CUDA[] = x
-        println("PDMesh: CUDA set to $x")
-    end
-    if x
-        if CUDA.functional()
-            fn()
-        else
-            println("PDMesh: CUDA is not available.")
+function set_device(device)
+    device = get_valid_device(device)
+    DEVICE[] = device
+    println("PeriDyn: DEVICE set to $(DEVICE[])")
+end
+
+function get_valid_device(x)
+    out = x
+    if x==:cuda
+        if !CUDA.functional()
+            out = :cpu
+            println("PeriDyn: CUDA is not available.")
         end
     else
-        fn()
+        out = :cpu
     end
+    return out
 end
 
 function reset_cuda()
-    set_cuda(CUDA.functional())
+    set_device(:cuda)
 end
 
-set_cuda(false)
+
 
 
 include("./shapes/shape.jl")

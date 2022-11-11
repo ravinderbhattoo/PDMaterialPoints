@@ -32,7 +32,7 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
     lattice = (c.bounds[:, 2] - c.bounds[:, 1]) ./ N
     mesh = zeros(3, prod(N))
 
-    if IF_CUDA[]
+    if DEVICE[]==:cuda
         mesh =  CUDA.CuArray(mesh)
         culattice = CuArray(lattice)
         CuNb1 = CuArray([prod(N[1:j]) for j in 1:length(N)])
