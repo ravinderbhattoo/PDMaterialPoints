@@ -7,7 +7,7 @@ const DEVICE = Ref{Symbol}(:cpu)
 function set_device(device)
     device = get_valid_device(device)
     DEVICE[] = device
-    println("PeriDyn: DEVICE set to $(DEVICE[])")
+    println("PDMesh: DEVICE set to $(DEVICE[])")
 end
 
 function get_valid_device(x)
@@ -15,7 +15,7 @@ function get_valid_device(x)
     if x==:cuda
         if !CUDA.functional()
             out = :cpu
-            println("PeriDyn: CUDA is not available.")
+            println("PDMesh: CUDA is not available.")
         end
     else
         out = :cpu

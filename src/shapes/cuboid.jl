@@ -74,13 +74,16 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
     end
 
     mesh = mesh .+ (resolution*rand_  * (randn(size(mesh)...) .- 1.0))
+    volume = ones(eltype(mesh), prod(N))
+    fill!(volume, prod(lattice))
+    type = type*ones(Int64, prod(N))
 
     return Dict(
         :x => mesh,
-        :v => zeros(size(mesh)),
+        :v => similar(mesh),
         :y => copy(mesh),
-        :volume => ones(prod(N))*prod(lattice),
-        :type => type*ones(Int64, prod(N))
+        :volume => volume,
+        :type => type
         )
 end
 
