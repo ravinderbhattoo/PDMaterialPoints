@@ -4,14 +4,29 @@ export create, Cone, show
 """
     Cone
 
-Shape object of  type cone.
+Cone shape.
 
-## Args
-    - radius : radius of cone
-    - length : length of cone
+# Fields
+- `radius::Float64`: Radius of the cone.
+- `length::Float64`: Length of the cone.
 
-## Returns
-    - obj : Shape object **Cone**.
+# Example
+```julia
+using PDMesh
+
+# Create a cone
+cone = Cone(1.0, 1.0)
+
+# Create a mesh
+mesh = create(cone)
+```
+
+# See also
+- [`create`](@ref)
+
+# References
+- [Wikipedia](https://en.wikipedia.org/wiki/Cone)
+
 """
 mutable struct Cone <: Shape
     radius::Float64
@@ -24,6 +39,35 @@ function Base.show(io::IO, x::Cone)
     println(io, "Length: $(x.length)")
 end
 
+"""
+    create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
+
+Create a mesh of a cone.
+
+# Arguments
+- `c::Cone`: Cone shape.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
+
+# Returns
+- `Dict`: Mesh.
+
+# Example
+```julia
+using PDMesh
+
+# Create a cone
+cone = Cone(1.0, 1.0)
+
+# Create a mesh
+mesh = create(cone)
+```
+
+# See also
+- [`Cone`](@ref)
+
+"""
 function create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
     radius = c.radius
     length_ = c.length

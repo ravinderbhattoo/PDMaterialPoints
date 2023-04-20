@@ -4,14 +4,22 @@ export create, Disk, show
 """
     Disk
 
-Shape object of  type disk.
+Disk shape.
 
-## Args
-    - radius : radius of disk
-    - thickness : length of disk
+# Fields
+- `radius::Float64`: Radius of the disk.
+- `thickness::Float64`: Thickness of the disk.
 
-## Returns
-    - obj : Shape object **disk**.
+# Example
+```julia
+using PDMesh
+
+# Create a disk
+disk = Disk(1.0, 0.1)
+
+# Create a mesh
+mesh = create(disk, resolution=0.1)
+```
 """
 mutable struct Disk <: Shape
     radius::Float64
@@ -24,6 +32,32 @@ function Base.show(io::IO, x::Disk)
     println(io, "Thickness: $(x.thickness)")
 end
 
+
+"""
+    create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
+
+Create a mesh from a disk.
+
+# Arguments
+- `c::Disk`: Disk object.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+
+# Example
+```julia
+using PDMesh
+
+# Create a disk
+disk = Disk(1.0, 0.1)
+
+# Create a mesh
+mesh = create(disk, resolution=0.1)
+```
+"""
 function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
     if isa(resolution, Nothing)
         resolution = min(c.radius/10, c.thickness/3)

@@ -4,34 +4,68 @@ export create, Cylinder, show
 """
     Cylinder
 
-Shape object of  type cylinder.
+Cylinder shape.
 
-## Args
-    - radius : radius of cylinder
-    - thickness : thickness of the wall of cylinder
-    - length : length of cylinder
+# Fields
+- `radius::Float64`: Radius of the cylinder.
+- `thickness::Float64`: Thickness of the cylinder.
+- `length::Float64`: Length of the cylinder.
 
-## Returns
-    - obj : Shape object **Cylinder**.
+# Example
+```julia
+using PDMesh
+
+# Create a cylinder
+cylinder = Cylinder(1.0, 0.1, 2.0)
+
+# Create a mesh
+mesh = create(cylinder, resolution=0.1)
+```
 """
 mutable struct Cylinder <: Shape
-    radius1::Float64
+    radius::Float64
     thickness::Float64
     length::Float64
 end
 
 function Base.show(io::IO, x::Cylinder)
     println(io, "Cylinder")
-    println(io, "Radius1: $(x.radius1)")
+    println(io, "Radius: $(x.radius)")
     println(io, "Thickness: $(x.thickness)")
     println(io, "Length: $(x.length)")
 end
 
+
+"""
+    create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int64=1)
+
+Create a mesh from a cylinder.
+
+# Arguments
+- `c::Cylinder`: Cylinder object.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+
+# Example
+```julia
+using PDMesh
+
+# Create a cylinder
+cylinder = Cylinder(1.0, 0.1, 2.0)
+
+# Create a mesh
+mesh = create(cylinder, resolution=0.1)
+```
+"""
 function create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int64=1)
     if isa(resolution, Nothing)
-        resolution = min(c.radius1/10, c.thickness/3)
+        resolution = min(c.radius/10, c.thickness/3)
     end
-    radius=c.radius1
+    radius=c.radius
     thickness=c.thickness
     length_=c.length
     e_size=resolution

@@ -4,13 +4,28 @@ export create, Cuboid, show
 """
     Cuboid
 
-Shape object of  type cuboid.
+Cuboid shape.
 
-## Args
-    - bounds : min, max of cuboid for e.g. [-10 10; 0 3; -2 2]
+# Fields
+- `bounds::Array{Float64, 2}`: Bounds of the cuboid.
 
-## Returns
-    - obj : Shape object **Cuboid**.
+# Example
+```julia
+using PDMesh
+
+# Create a cuboid
+cuboid = Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
+
+# Create a mesh
+mesh = create(cuboid)
+```
+
+# See also
+- [`create`](@ref)
+
+# References
+- [Wikipedia](https://en.wikipedia.org/wiki/Cuboid)
+
 """
 mutable struct Cuboid <: Shape
     bounds::Array{Float64, 2}
@@ -23,6 +38,36 @@ function Base.show(io::IO, x::Cuboid)
     end
 end
 
+
+"""
+    create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
+
+Create a mesh of a cuboid.
+
+# Arguments
+- `c::Cuboid`: Cuboid shape.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
+
+# Returns
+- `Dict`: Mesh.
+
+# Example
+```julia
+using PDMesh
+
+# Create a cuboid
+cuboid = Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
+
+# Create a mesh
+mesh = create(cuboid)
+```
+
+# See also
+- [`Cuboid`](@ref)
+
+"""
 function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
     if isa(resolution, Nothing)
         N = [10 for i in 1:size(c.bounds)[1]]

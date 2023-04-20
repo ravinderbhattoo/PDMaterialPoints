@@ -1,5 +1,33 @@
 export rotate
 
+"""
+    rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0])
+
+Rotate mesh particles for object by given angle about given vector and point.
+
+# Arguments
+- `x::Array{Float64,2}`: Array of mesh particles.
+- `angle=0.0`: Rotation angle.
+- `point=[0.0, 0.0, 0.0]`: Rotation point.
+- `vector_=[1.0, 0.0, 0.0]`: Rotation vector.
+
+# Returns
+- `x::Array{Float64,2}`: Array of mesh particles.
+
+# Example
+```julia
+using PDMesh
+
+# Create a disk
+disk = Disk(1.0, 0.1)
+
+# Create a mesh
+mesh = create(disk, resolution=0.1)
+
+# Rotate particles
+mesh = rotate(mesh, angle=90.0)
+```
+"""
 function rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0])
     t = angle/180*pi
     x = x .- vec(point)
