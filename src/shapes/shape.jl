@@ -1,6 +1,6 @@
 # Exports
 
-export Shape, PostOpObj, create, combine, unpack, repack, repack!
+export Shape, PostOpObj, create, make, combine, unpack, repack, repack!
 
 """
     Shape
@@ -57,6 +57,22 @@ Abstact function for creating **Shape** objects.
 """
 function create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
     error("Not implemented for type **$(typeof(shape))** yet.")
+end
+
+
+"""
+    make(shape::T) where T <: Shape
+
+Create a mesh from a shape. This function is a wrapper for the create function. It is used to create a mesh from a shape with default arguments.
+
+# Arguments
+- `shape::T`: Shape object.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+"""
+function make(shape::T) where T <: Union{Shape, PostOpObj}
+    create(shape; resolution=0.1, rand_=0.01, type=1)
 end
 
 

@@ -1,5 +1,5 @@
 # exports
-export create, Sphere, show, Shell
+export create, Sphere, Shell, StandardSphere
 
 """
     Sphere
@@ -23,6 +23,15 @@ mesh = create(sphere, resolution=0.1)
 mutable struct Sphere <: Shape
     radius::Float64
 end
+
+function Sphere()
+    Sphere(1.0)
+end
+
+function StandardSphere()
+    create(Sphere(); resolution=0.1, rand_=0.01, type=1)
+end
+
 
 """
     Shell

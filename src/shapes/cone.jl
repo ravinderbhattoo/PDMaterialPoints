@@ -1,5 +1,5 @@
 # exports
-export create, Cone, show
+export create, Cone, StandardCone
 
 """
     Cone
@@ -33,11 +33,20 @@ mutable struct Cone <: Shape
     length::Float64
 end
 
+function Cone()
+    Cone(1.0, 1.0)
+end
+
+function StandardCone()
+    create(Cone(); resolution=0.1, rand_=0.01, type=1)
+end
+
 function Base.show(io::IO, x::Cone)
     println(io, "Cone")
     println(io, "Radius: $(x.radius)")
     println(io, "Length: $(x.length)")
 end
+
 
 """
     create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)

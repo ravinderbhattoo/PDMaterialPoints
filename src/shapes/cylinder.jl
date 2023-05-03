@@ -1,5 +1,5 @@
 # exports
-export create, Cylinder, show
+export create, Cylinder, StandardCylinder
 
 """
     Cylinder
@@ -27,6 +27,16 @@ mutable struct Cylinder <: Shape
     thickness::Float64
     length::Float64
 end
+
+
+function Cylinder()
+    Cylinder(1.0, 0.3, 1.0)
+end
+
+function StandardCylinder()
+    create(Cylinder(); resolution=0.1, rand_=0.01, type=1)
+end
+
 
 function Base.show(io::IO, x::Cylinder)
     println(io, "Cylinder")
