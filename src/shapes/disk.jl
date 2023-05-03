@@ -1,10 +1,39 @@
 # exports
-export create, Disk, show
+export create, Disk, StandardDisk
 
+"""
+    Disk
+
+Disk shape.
+
+# Fields
+- `radius::Float64`: Radius of the disk.
+- `thickness::Float64`: Thickness of the disk.
+
+# Example
+```julia
+using PDMesh
+
+# Create a disk
+disk = Disk(1.0, 0.1)
+
+# Create a mesh
+mesh = create(disk, resolution=0.1)
+```
+"""
 mutable struct Disk <: Shape
     radius::Float64
     thickness::Float64
 end
+
+function Disk()
+    Disk(1.0, 0.3)
+end
+
+function StandardDisk()
+    create(Disk(); resolution=0.1, rand_=0.01, type=1)
+end
+
 
 function Base.show(io::IO, x::Disk)
     println(io, "Disk")
@@ -12,6 +41,32 @@ function Base.show(io::IO, x::Disk)
     println(io, "Thickness: $(x.thickness)")
 end
 
+
+"""
+    create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
+
+Create a mesh from a disk.
+
+# Arguments
+- `c::Disk`: Disk object.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+
+# Example
+```julia
+using PDMesh
+
+# Create a disk
+disk = Disk(1.0, 0.1)
+
+# Create a mesh
+mesh = create(disk, resolution=0.1)
+```
+"""
 function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
     if isa(resolution, Nothing)
         resolution = min(c.radius/10, c.thickness/3)
@@ -26,10 +81,11 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
     mesh = Vector{Float64}[]
     vol = Float64[]
     total_vol = 0
+
     for i in 1:nm_thickness
-        z = (i - 0.5)*et_size 
+        z = (i - 0.5)*et_size
         total_vol += et_size*pi*e_size^2
-        push!(mesh, [0, 0.0, z + rand_*randn()*et_size]) 
+        push!(mesh, [0, 0.0, z + rand_*randn()*et_size])
         push!(vol, et_size*pi*e_size^2)
         for j in 1:nm_radial_ele
             r_in = e_size/2 + (j-1) * er_size
@@ -53,12 +109,14 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
             end
         end
     end
+
     mesh = hcat(mesh...)
+
     return Dict(
-        :x => mesh, 
-        :v => zeros(size(mesh)), 
-        :y => copy(mesh), 
-        :volume => vol, 
+        :x => mesh,
+        :v => 0*mesh,
+        :y => copy(mesh),
+        :volume => vol,
         :type => type*ones(Int64, length(vol)),
-    ) 
+    )
 end

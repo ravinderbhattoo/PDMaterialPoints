@@ -1,13 +1,30 @@
 # Exports
 
-export Shape, PostOpObj, create, combine, unpack, repack, repack!
+export Shape, PostOpObj, create, make, combine, unpack, repack, repack!
 
+"""
+    Shape
+
+Abstract type for shapes.
+"""
 abstract type Shape end
 
-mutable struct PostOpObj 
+"""
+    PostOpObj
+
+These objects are used to create a post operation object (lazy)
+from object ( or post operation object)and an operation.
+Operations will be applied while a create call.
+
+# Fields
+- `objs::Vector{Any}`: Objects to be operated on.
+- `operations::Array{Function}`: Operations to be applied.
+
+"""
+mutable struct PostOpObj
     objs::Vector{Any}
     operations::Array{Function}
-    function PostOpObj(obj, func) 
+    function PostOpObj(obj, func)
         if ~isa(obj, Vector)
             obj = [obj]
         end
@@ -15,7 +32,7 @@ mutable struct PostOpObj
                 func = [func]
         end
         new(obj, func)
-    end    
+    end
 end
 
 function Base.copy(x::T) where T<:Union{Shape, PostOpObj}
@@ -29,26 +46,49 @@ end
 
 Abstact function for creating **Shape** objects.
 
-## Returns
-    - X : Initial reference position 
-    - V : Initial velocity 
-    - Y : Initial position 
-    - volume : Volume per particle point 
-    - type: Type of particle point
+# Arguments
+- `shape::T`: Shape object.
+- `resolution=nothing`: Resolution of the mesh.
+- `rand_=0.0`: Randomization factor.
+- `type::Int64=1`: Type of the mesh.
 
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
 """
 function create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
     error("Not implemented for type **$(typeof(shape))** yet.")
-end 
-
-function mycat(a, b)
-    if length(size(a))==1
-        return vcat(a, b)
-    else
-        return hcat(a, b)
-    end
 end
 
+
+"""
+    make(shape::T) where T <: Shape
+
+Create a mesh from a shape. This function is a wrapper for the create function. It is used to create a mesh from a shape with default arguments.
+
+# Arguments
+- `shape::T`: Shape object.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+"""
+function make(shape::T) where T <: Union{Shape, PostOpObj}
+    create(shape; resolution=0.1, rand_=0.01, type=1)
+end
+
+
+"""
+    create(pobj::PostOpObj, args...; kwargs...)
+
+Create a mesh from a post operation object.
+
+# Arguments
+- `pobj::PostOpObj`: Post operation object.
+- `args...`: Arguments to be passed to the create function.
+- `kwargs...`: Keyword arguments to be passed to the create function.
+
+# Returns
+- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+"""
 function create(pobj::PostOpObj, args...; kwargs...)
     temp = nothing
     out = nothing
@@ -57,24 +97,86 @@ function create(pobj::PostOpObj, args...; kwargs...)
         if isa(out, Nothing)
             out = temp
         else
-            out = mycat.(out, temp)
+            for (key, val) in out
+                out[key] = mycat(out[key], temp[key])
+            end
         end
     end
     for func in pobj.operations
         out = func(out)
     end
+    out[:y] .= out[:x]
     return out
 end
 
-function combine(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
-    PostOpObj([obj1, obj2], []) 
+function Base.:+(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+    PostOpObj([obj1, obj2], [])
+end
+
+function Base.:+(obj1::T1, obj2::Nothing) where {T1<:Union{Shape, PostOpObj}}
+    PostOpObj([obj1], [])
 end
 
 
+"""
+    add(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+
+Add two objects.
+
+# Arguments
+- `obj1::T1`: First object.
+- `obj2::T2`: Second object.
+
+"""
+function add(obj1, obj2)
+    obj1 + obj2
+end
+
+"""
+    combine(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+
+Combine two objects. Duplicate of add.
+"""
+function combine(obj1, obj2)
+    obj1 + obj2
+end
+
+function Base.:+(obj1::Nothing, obj2::T1) where {T1<:Union{Shape, PostOpObj}}
+    obj2 + obj1
+end
+
+
+"""
+    unpack(d::Dict)
+
+Unpack a dictionary into its components.
+
+# Arguments
+- `d::Dict`: Dictionary to be unpacked.
+
+# Returns
+- `x::Array{Float64, 1}`: x coordinates.
+- `v::Array{Float64, 1}`: v coordinates.
+- `y::Array{Float64, 1}`: y coordinates.
+- `volume::Array{Float64, 1}`: Volume of the mesh.
+- `type::Array{Int64, 1}`: Type of the mesh.
+"""
 function unpack(d::Dict)
     return d[:x], d[:v], d[:y], d[:volume], d[:type]
 end
 
+"""
+    repack(args...; keys_ = (:x, :v, :y, :volume, :type))
+
+Repack a dictionary from its components.
+
+# Arguments
+- `args...`: Components to be packed.
+- `keys_ = (:x, :v, :y, :volume, :type)`: Keys of the dictionary.
+
+# Returns
+- `d::Dict`: Dictionary containing the components.
+"""
 function repack(args...; keys_ = (:x, :v, :y, :volume, :type))
     d = Dict()
     for i in 1:5
@@ -83,6 +185,19 @@ function repack(args...; keys_ = (:x, :v, :y, :volume, :type))
     d
 end
 
+"""
+    repack!(d::Dict, keys_, vals)
+
+Repack a dictionary from its components inplace.
+
+# Arguments
+- `d::Dict`: Dictionary to be repacked.
+- `keys_`: Keys of the dictionary.
+- `vals`: Values of the dictionary.
+
+# Returns
+- `d::Dict`: Dictionary containing the components.
+"""
 function repack!(d::Dict, keys_, vals)
     if length(keys_)==length(vals)
         for i in 1:length(vals)
@@ -94,6 +209,13 @@ function repack!(d::Dict, keys_, vals)
     d
 end
 
+function mycat(a, b)
+    if length(size(a))==1
+        return vcat(a, b)
+    else
+        return hcat(a, b)
+    end
+end
 
 include("./cuboid.jl")
 include("./sphere.jl")
