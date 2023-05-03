@@ -93,7 +93,7 @@ function create(c::Union{Sphere,Shell}; resolution=nothing, rand_=0.0, type::Int
 
     return Dict(
         :x => mesh,
-        :v => zeros(size(mesh)),
+        :v => 0*mesh,
         :y => copy(mesh),
         :volume => vol,
         :type => type_

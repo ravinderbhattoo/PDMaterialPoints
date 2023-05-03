@@ -114,7 +114,7 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
 
     return Dict(
         :x => mesh,
-        :v => zeros(size(mesh)),
+        :v => 0*mesh,
         :y => copy(mesh),
         :volume => vol,
         :type => type*ones(Int64, length(vol)),

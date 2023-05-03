@@ -130,7 +130,7 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
 
     return Dict(
         :x => mesh,
-        :v => zeros(size(mesh)),
+        :v => 0*mesh,
         :y => copy(mesh),
         :volume => ones(prod(N))*prod(lattice),
         :type => type*ones(Int64, prod(N))
