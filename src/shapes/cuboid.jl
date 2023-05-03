@@ -1,5 +1,5 @@
 # exports
-export create, Cuboid, show
+export create, Cuboid, StandardCuboid
 
 """
     Cuboid
@@ -29,6 +29,14 @@ mesh = create(cuboid)
 """
 mutable struct Cuboid <: Shape
     bounds::Array{Float64, 2}
+end
+
+function Cuboid()
+    Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
+end
+
+function StandardCuboid()
+    create(Cuboid(); resolution=0.1, rand_=0.01, type=1)
 end
 
 function Base.show(io::IO, x::Cuboid)
@@ -125,7 +133,7 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
 
     return Dict(
         :x => mesh,
-        :v => similar(mesh),
+        :v => 0*mesh,
         :y => copy(mesh),
         :volume => volume,
         :type => type

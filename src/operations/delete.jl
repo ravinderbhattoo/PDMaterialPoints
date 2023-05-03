@@ -1,9 +1,9 @@
 export delete
 
 """
-    delete(out, mask::BitArray)
+    keepit(out, mask::BitArray)
 
-Delete mesh particles for object using boolean array mask.
+Keep mesh particles for object using boolean array mask.
 
 # Arguments
 - `out`: Mesh data.
@@ -12,7 +12,7 @@ Delete mesh particles for object using boolean array mask.
 # Returns
 - `out`: Mesh data.
 """
-function delete(out, mask::BitArray)
+function keepit(out, mask::BitArray)
     return repack(out[:x][:, mask], out[:v][:, mask], out[:y][:, mask], out[:volume][mask], out[:type][mask])
 end
 
@@ -50,7 +50,7 @@ function delete(obj::T, f::Function) where T
     # x, v, y, vol, type
     function func(out)
         mask = vec(f(out)) .== false
-        out = delete(out, mask)
+        out = keepit(out, mask)
         return out
     end
     if isa(obj, Shape)

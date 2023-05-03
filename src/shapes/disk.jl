@@ -1,5 +1,5 @@
 # exports
-export create, Disk, show
+export create, Disk, StandardDisk
 
 """
     Disk
@@ -25,6 +25,15 @@ mutable struct Disk <: Shape
     radius::Float64
     thickness::Float64
 end
+
+function Disk()
+    Disk(1.0, 0.3)
+end
+
+function StandardDisk()
+    create(Disk(); resolution=0.1, rand_=0.01, type=1)
+end
+
 
 function Base.show(io::IO, x::Disk)
     println(io, "Disk")
@@ -105,7 +114,7 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
 
     return Dict(
         :x => mesh,
-        :v => zeros(size(mesh)),
+        :v => 0*mesh,
         :y => copy(mesh),
         :volume => vol,
         :type => type*ones(Int64, length(vol)),

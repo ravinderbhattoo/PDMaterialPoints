@@ -1,5 +1,5 @@
 # exports
-export create, Cone, show
+export create, Cone, StandardCone
 
 """
     Cone
@@ -33,11 +33,20 @@ mutable struct Cone <: Shape
     length::Float64
 end
 
+function Cone()
+    Cone(1.0, 1.0)
+end
+
+function StandardCone()
+    create(Cone(); resolution=0.1, rand_=0.01, type=1)
+end
+
 function Base.show(io::IO, x::Cone)
     println(io, "Cone")
     println(io, "Radius: $(x.radius)")
     println(io, "Length: $(x.length)")
 end
+
 
 """
     create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
@@ -77,5 +86,5 @@ function create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
 
     mask = vec(sum(X.^2, dims=1) .<= ((length_ .- z)./length_.*radius).^2)
     mesh = x[:, mask]
-    return Dict(:x => mesh, :v => zeros(size(mesh)), :y => copy(mesh), :volume => vol[mask], :type => type*ones(Int64, sum(mask)))
+    return Dict(:x => mesh, :v => 0*mesh, :y => copy(mesh), :volume => vol[mask], :type => type*ones(Int64, sum(mask)))
 end
