@@ -11,7 +11,7 @@ makedocs(sitename="PDMesh";
     format = Documenter.HTML(
     footer="Updated: $(now()). "*string(Documenter.HTML().footer),
     prettyurls = get(ENV, "CI", nothing) == "true",
-    assets=String[indigo]
+    assets=String[]
     ),
     modules=[PDMesh],
     pages = [

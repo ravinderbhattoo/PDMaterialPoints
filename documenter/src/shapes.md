@@ -1,8 +1,11 @@
 # Shapes
 
-- [`PDMesh.Cone`](@ref)
-- [`PDMesh.Cuboid`](@ref)
-- [`PDMesh.Cylinder`](@ref)
-- [`PDMesh.Disk`](@ref)
-- [`PDMesh.Sphere`](@ref)
+- [`Cone`](@ref)
+- [`Cuboid`](@ref)
+- [`Cube`](@ref)
+- [`Cylinder`](@ref)
+- [`Disk`](@ref)
+- [`Pyramid(::Any, ::Any)`](@ref)
+- [`Indentor(::Any, ::Any)`](@ref)
+- [`Sphere`](@ref)
 

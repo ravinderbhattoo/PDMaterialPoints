@@ -1,5 +1,5 @@
 # exports
-export create, Cuboid, StandardCuboid
+export create, Cube, Cuboid, StandardCuboid
 
 """
     Cuboid
@@ -31,19 +31,67 @@ mutable struct Cuboid <: Shape
     bounds::Array{Float64, 2}
 end
 
-function Cuboid()
-    Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
-end
-
-function StandardCuboid()
-    create(Cuboid(); resolution=0.1, rand_=0.01, type=1)
-end
-
 function Base.show(io::IO, x::Cuboid)
     println(io, "Cuboid")
     for i in 1:size(x.bounds)[1]
         println(io, "Dimension $i: Low $(x.bounds[i, 1]) High $(x.bounds[i, 2])")
     end
+end
+
+"""
+    Cube(L)
+
+Cube shape. A special case of Cuboid.
+
+# Arguments
+- `L::Float64`: Length of the cube.
+
+# Example
+```julia
+using PDMesh
+
+# Create a cube
+cube = Cube(1.0)
+
+# Create a mesh
+mesh = create(cube)
+```
+
+# See also
+- [`create`](@ref)
+- [`Cuboid`](@ref)
+
+"""
+function Cube(L)
+    Cuboid([-L/2 L/2; -L/2 L/2; -L/2 L/2])
+end
+
+Cube() = Cube(1.0)
+Cuboid() = Cube()
+
+"""
+    StandardCuboid()
+
+Standard cuboid shape. A special case of Cuboid. Bounds are [-0.5 0.5; -0.5 0.5; -0.5 0.5]. Length is 1.0.
+
+# Example
+```julia
+using PDMesh
+
+# Create a standard cuboid
+cuboid = StandardCuboid()
+
+# Create a mesh
+mesh = create(cuboid)
+```
+
+# See also
+- [`create`](@ref)
+- [`Cuboid`](@ref)
+
+"""
+function StandardCuboid()
+    create(Cuboid(); resolution=0.1, rand_=0.01, type=1)
 end
 
 

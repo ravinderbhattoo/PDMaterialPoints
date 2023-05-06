@@ -26,10 +26,27 @@ mutable struct Disk <: Shape
     thickness::Float64
 end
 
-function Disk()
-    Disk(1.0, 0.3)
-end
+Disk() = Disk(1.0, 0.3)
 
+"""
+    StandardDisk()
+
+Standard disk shape. A special case of Disk. Radius is 1.0. Thickness is 0.3.
+
+# Example
+```julia
+using PDMesh
+
+# Create a standard disk
+disk = StandardDisk()
+
+# Create a mesh
+mesh = create(disk)
+```
+
+# See also
+- [`create`](@ref)
+"""
 function StandardDisk()
     create(Disk(); resolution=0.1, rand_=0.01, type=1)
 end
