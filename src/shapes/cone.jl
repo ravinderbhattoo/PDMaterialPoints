@@ -33,19 +33,38 @@ mutable struct Cone <: Shape
     length::Float64
 end
 
-function Cone()
-    Cone(1.0, 1.0)
-end
-
-function StandardCone()
-    create(Cone(); resolution=0.1, rand_=0.01, type=1)
-end
-
 function Base.show(io::IO, x::Cone)
     println(io, "Cone")
     println(io, "Radius: $(x.radius)")
     println(io, "Length: $(x.length)")
 end
+
+Cone() = Cone(1.0, 1.0)
+
+"""
+    StandardCone()
+
+Standard cone shape. A special case of Cone. Radius and length are 1.0.
+
+# Example
+```julia
+using PDMesh
+
+# Create a standard cone
+cone = StandardCone()
+
+# Create a mesh
+mesh = create(cone)
+```
+
+# See also
+- [`Cone`](@ref)
+
+"""
+function StandardCone()
+    create(Cone(); resolution=0.1, rand_=0.01, type=1)
+end
+
 
 
 """

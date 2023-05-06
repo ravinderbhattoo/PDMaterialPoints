@@ -24,10 +24,27 @@ mutable struct Sphere <: Shape
     radius::Float64
 end
 
-function Sphere()
-    Sphere(1.0)
-end
+Sphere() = Sphere(1.0)
 
+"""
+    StandardSphere()
+
+Standard sphere shape. A special case of Sphere. Radius is 1.0.
+
+# Example
+```julia
+using PDMesh
+
+# Create a standard sphere
+sphere = StandardSphere()
+
+# Create a mesh
+mesh = create(sphere, resolution=0.1)
+```
+
+# See also
+- [`create`](@ref)
+"""
 function StandardSphere()
     create(Sphere(); resolution=0.1, rand_=0.01, type=1)
 end

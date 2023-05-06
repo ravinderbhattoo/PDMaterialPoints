@@ -28,11 +28,27 @@ mutable struct Cylinder <: Shape
     length::Float64
 end
 
+Cylinder() = Cylinder(1.0, 0.3, 1.0)
 
-function Cylinder()
-    Cylinder(1.0, 0.3, 1.0)
-end
+"""
+    StandardCylinder()
 
+Standard cylinder shape. A special case of Cylinder. Radius is 1.0. Thickness is 0.3. Length is 1.0.
+
+# Example
+```julia
+using PDMesh
+
+# Create a standard cylinder
+cylinder = StandardCylinder()
+
+# Create a mesh
+mesh = create(cylinder)
+```
+
+# See also
+- [`create`](@ref)
+"""
 function StandardCylinder()
     create(Cylinder(); resolution=0.1, rand_=0.01, type=1)
 end
