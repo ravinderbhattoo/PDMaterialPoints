@@ -46,7 +46,7 @@ end
 
 
 """
-    create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
+    create(shape::T; resolution=nothing, rand_=0.0, type::Int=1) where T <: Shape
 
 Abstact function for creating **Shape** objects.
 
@@ -54,12 +54,12 @@ Abstact function for creating **Shape** objects.
 - `shape::T`: Shape object.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
-- `type::Int64=1`: Type of the mesh.
+- `type::Int=1`: Type of the mesh.
 
 # Returns
 - `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
 """
-function create(shape::T; resolution=nothing, rand_=0.0, type::Int64=1) where T <: Shape
+function create(shape::T; resolution=nothing, rand_=0.0, type::Int=1) where T <: Shape
     error("Not implemented for type **$(typeof(shape))** yet.")
 end
 

@@ -7,8 +7,8 @@ export create, Disk, StandardDisk
 Disk shape.
 
 # Fields
-- `radius::Float64`: Radius of the disk.
-- `thickness::Float64`: Thickness of the disk.
+- `radius::AbstractFloat`: Radius of the disk.
+- `thickness::AbstractFloat`: Thickness of the disk.
 
 # Example
 ```julia
@@ -22,8 +22,8 @@ mesh = create(disk, resolution=0.1)
 ```
 """
 mutable struct Disk <: Shape
-    radius::Float64
-    thickness::Float64
+    radius::AbstractFloat
+    thickness::AbstractFloat
 end
 
 Disk() = Disk(1.0, 0.3)
@@ -60,7 +60,7 @@ end
 
 
 """
-    create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
+    create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
 
 Create a mesh from a disk.
 
@@ -68,7 +68,7 @@ Create a mesh from a disk.
 - `c::Disk`: Disk object.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
-- `type::Int64=1`: Type of the mesh.
+- `type::Int=1`: Type of the mesh.
 
 # Returns
 - `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
@@ -84,7 +84,7 @@ disk = Disk(1.0, 0.1)
 mesh = create(disk, resolution=0.1)
 ```
 """
-function create(c::Disk; resolution=nothing, rand_=0.0, type::Int64=1)
+function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
     if isa(resolution, Nothing)
         resolution = min(c.radius/10, c.thickness/3)
     end

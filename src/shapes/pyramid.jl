@@ -7,7 +7,7 @@ export Pyramid, Indentor
 Pyramid shape.
 
 # Arguments
-- `angle::Float64`: Apex angle of the Pyramid.
+- `angle::AbstractFloat`: Apex angle of the Pyramid.
 
 # Example
 ```julia
@@ -52,11 +52,11 @@ Pyramid() = Pyramid(60.0, 1.0)
 Indentor shape. A special case of Pyramid.
 
 # Arguments
-- `angle::Float64`: Apex angle of the Indentor.
-- `height::Float64`: Height of the Indentor.
+- `angle::AbstractFloat`: Apex angle of the Indentor.
+- `height::AbstractFloat`: Height of the Indentor.
 
 # Keyword Arguments
-- `sides::Int64`: Number of sides of the Indentor.
+- `sides::Int`: Number of sides of the Indentor.
 
 # Example
 ```julia

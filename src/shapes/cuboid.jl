@@ -44,7 +44,7 @@ end
 Cube shape. A special case of Cuboid.
 
 # Arguments
-- `L::Float64`: Length of the cube.
+- `L::AbstractFloat`: Length of the cube.
 
 # Example
 ```julia
@@ -96,7 +96,7 @@ end
 
 
 """
-    create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
+    create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
 
 Create a mesh of a cuboid.
 
@@ -104,7 +104,7 @@ Create a mesh of a cuboid.
 - `c::Cuboid`: Cuboid shape.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
-- `type::Int64=1`: Type of the mesh.
+- `type::Int=1`: Type of the mesh.
 
 # Returns
 - `Dict`: Mesh.
@@ -124,7 +124,7 @@ mesh = create(cuboid)
 - [`Cuboid`](@ref)
 
 """
-function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int64=1)
+function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
     if isa(resolution, Nothing)
         N = [10 for i in 1:size(c.bounds)[1]]
     else

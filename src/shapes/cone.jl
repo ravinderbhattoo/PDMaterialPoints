@@ -7,8 +7,8 @@ export create, Cone, StandardCone
 Cone shape.
 
 # Fields
-- `radius::Float64`: Radius of the cone.
-- `length::Float64`: Length of the cone.
+- `radius::AbstractFloat`: Radius of the cone.
+- `length::AbstractFloat`: Length of the cone.
 
 # Example
 ```julia
@@ -29,8 +29,8 @@ mesh = create(cone)
 
 """
 mutable struct Cone <: Shape
-    radius::Float64
-    length::Float64
+    radius::AbstractFloat
+    length::AbstractFloat
 end
 
 function Base.show(io::IO, x::Cone)
@@ -68,7 +68,7 @@ end
 
 
 """
-    create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
+    create(c::Cone; resolution=nothing, rand_=0.0, type::Int=1)
 
 Create a mesh of a cone.
 
@@ -76,7 +76,7 @@ Create a mesh of a cone.
 - `c::Cone`: Cone shape.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
-- `type::Int64=1`: Type of the mesh.
+- `type::Int=1`: Type of the mesh.
 
 # Returns
 - `Dict`: Mesh.
@@ -96,7 +96,7 @@ mesh = create(cone)
 - [`Cone`](@ref)
 
 """
-function create(c::Cone; resolution=nothing, rand_=0.0, type::Int64=1)
+function create(c::Cone; resolution=nothing, rand_=0.0, type::Int=1)
     radius = c.radius
     length_ = c.length
     x, v, y, vol, type_ = unpack(create(Disk(radius, length_), resolution=resolution, rand_=rand_))

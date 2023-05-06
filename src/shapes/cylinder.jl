@@ -7,9 +7,9 @@ export create, Cylinder, StandardCylinder
 Cylinder shape.
 
 # Fields
-- `radius::Float64`: Radius of the cylinder.
-- `thickness::Float64`: Thickness of the cylinder.
-- `length::Float64`: Length of the cylinder.
+- `radius::AbstractFloat`: Radius of the cylinder.
+- `thickness::AbstractFloat`: Thickness of the cylinder.
+- `length::AbstractFloat`: Length of the cylinder.
 
 # Example
 ```julia
@@ -23,9 +23,9 @@ mesh = create(cylinder, resolution=0.1)
 ```
 """
 mutable struct Cylinder <: Shape
-    radius::Float64
-    thickness::Float64
-    length::Float64
+    radius::AbstractFloat
+    thickness::AbstractFloat
+    length::AbstractFloat
 end
 
 Cylinder() = Cylinder(1.0, 0.3, 1.0)
@@ -63,7 +63,7 @@ end
 
 
 """
-    create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int64=1)
+    create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int=1)
 
 Create a mesh from a cylinder.
 
@@ -71,7 +71,7 @@ Create a mesh from a cylinder.
 - `c::Cylinder`: Cylinder object.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
-- `type::Int64=1`: Type of the mesh.
+- `type::Int=1`: Type of the mesh.
 
 # Returns
 - `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
@@ -87,7 +87,7 @@ cylinder = Cylinder(1.0, 0.1, 2.0)
 mesh = create(cylinder, resolution=0.1)
 ```
 """
-function create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int64=1)
+function create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int=1)
     if isa(resolution, Nothing)
         resolution = min(c.radius/10, c.thickness/3)
     end

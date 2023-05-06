@@ -5,7 +5,7 @@
 - [`Cube`](@ref)
 - [`Cylinder`](@ref)
 - [`Disk`](@ref)
-- [`Pyramid(::Any, ::Any)`](@ref)
-- [`Indentor(::Any, ::Any)`](@ref)
+- [`Pyramid`](@ref)
+- [`Indentor`](@ref)
 - [`Sphere`](@ref)
 
