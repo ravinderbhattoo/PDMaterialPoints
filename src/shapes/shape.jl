@@ -17,23 +17,27 @@ from object ( or post operation object)and an operation.
 Operations will be applied while a create call.
 
 # Fields
+- `name::String`: Name of the object.
 - `objs::Vector{Any}`: Objects to be operated on.
 - `operations::Array{Function}`: Operations to be applied.
 
 """
 mutable struct PostOpObj
+    name::String
     objs::Vector{Any}
     operations::Array{Function}
-    function PostOpObj(obj, func)
+    function PostOpObj(obj, func; name="PostOpObj")
         if ~isa(obj, Vector)
             obj = [obj]
         end
         if ~isa(func, Vector)
                 func = [func]
         end
-        new(obj, func)
+        new(name, obj, func)
     end
 end
+
+Base.show(io::IO, obj::PostOpObj) = print(io, obj.name)
 
 function Base.copy(x::T) where T<:Union{Shape, PostOpObj}
     T(copy.([getfield(x, fn) for fn in fieldnames(T)])...)
@@ -222,5 +226,6 @@ include("./sphere.jl")
 include("./disk.jl")
 include("./cylinder.jl")
 include("./cone.jl")
+include("./pyramid.jl")
 
 
