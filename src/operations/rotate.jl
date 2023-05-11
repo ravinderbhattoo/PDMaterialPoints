@@ -14,19 +14,9 @@ Rotate mesh particles for object by given angle about given vector and point.
 # Returns
 - `x::Array{Float64,2}`: Array of mesh particles.
 
-# Example
-```julia
-using PDMesh
+# See also
+- [`rotate`](@ref)
 
-# Create a disk
-disk = Disk(1.0, 0.1)
-
-# Create a mesh
-mesh = create(disk, resolution=0.1)
-
-# Rotate particles
-mesh = rotate(mesh, angle=90.0)
-```
 """
 function rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0])
     t = angle/180*pi
@@ -57,12 +47,5 @@ function rotate(obj::T; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0
         x = rotate(x; angle=angle, point=point, vector_=vector_)
         return repack!(out, [:x], [x])
     end
-    if isa(obj, Shape)
-        return PostOpObj(obj, func)
-    elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)
-        return obj
-    else
-        error("Not allowed.")
-    end
+    return apply!(obj, func)
 end

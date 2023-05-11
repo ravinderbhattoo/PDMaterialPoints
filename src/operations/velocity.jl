@@ -59,12 +59,5 @@ function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
         v = velocity(v, mask, vel)
         return repack!(out, [:v], [v])
     end
-    if isa(obj, Shape)
-        return PostOpObj(obj, func)
-    elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)
-        return obj
-    else
-        error("Not allowed.")
-    end
+    return apply!(obj, func)
 end

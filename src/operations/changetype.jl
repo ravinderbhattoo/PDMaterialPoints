@@ -58,12 +58,5 @@ function changetype(obj::T, f::Function, ntype::Int) where T <: Union{Shape, Pos
         type = changetype(out[:type], mask, ntype)
         return repack!(out, [:type], [type])
     end
-    if isa(obj, Shape)
-        return PostOpObj(obj, func)
-    elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)
-        return obj
-    else
-        error("Not allowed.")
-    end
+    return apply!(obj, func)
 end

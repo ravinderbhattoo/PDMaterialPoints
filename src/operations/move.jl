@@ -12,20 +12,6 @@ Move mesh particles for object by given "by".
 # Returns
 - `x::Array{Float64,2}`: Array of mesh particles.
 
-# Example
-```julia
-using PDMesh
-
-# Create a disk
-disk = Disk(1.0, 0.1)
-
-# Create a mesh
-mesh = create(disk, resolution=0.1)
-
-# Move particles
-mesh = move(mesh, by=[0.0, 0.0, 0.1])
-```
-
 # See also
 - [`move`](@ref)
 
@@ -72,12 +58,5 @@ function move(obj::T; by=[0.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
         x = move(x, by=by)
         return repack!(out, [:x], [x])
     end
-    if isa(obj, Shape)
-        return PostOpObj(obj, func)
-    elseif isa(obj, PostOpObj)
-        push!(obj.operations, func)
-        return obj
-    else
-        error("Not allowed.")
-    end
+    return apply!(obj, func)
 end
