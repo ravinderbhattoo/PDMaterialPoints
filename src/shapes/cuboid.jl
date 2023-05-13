@@ -11,13 +11,13 @@ Cuboid shape.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cuboid
 cuboid = Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
 
-# Create a mesh
-mesh = create(cuboid)
+# Create a material-point-geometry.
+mpg =create(cuboid)
 ```
 
 # See also
@@ -48,13 +48,13 @@ Cube shape. A special case of Cuboid.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cube
 cube = Cube(1.0)
 
-# Create a mesh
-mesh = create(cube)
+# Create a material-point-geometry.
+mpg =create(cube)
 ```
 
 # See also
@@ -102,13 +102,13 @@ Standard cuboid shape. A special case of Cuboid. Bounds are [-0.5 0.5; -0.5 0.5;
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a standard cuboid
 cuboid = StandardCuboid()
 
-# Create a mesh
-mesh = create(cuboid)
+# Create a material-point-geometry.
+mpg =create(cuboid)
 ```
 
 # See also
@@ -124,26 +124,26 @@ end
 """
     create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
 
-Create a mesh of a cuboid.
+Create a material-point-geometry of a cuboid.
 
 # Arguments
 - `c::Cuboid`: Cuboid shape.
-- `resolution=nothing`: Resolution of the mesh.
+- `resolution=nothing`: Resolution of the material-point-geometry.
 - `rand_=0.0`: Randomization factor.
-- `type::Int=1`: Type of the mesh.
+- `type::Int=1`: Type of the material-point-geometry.
 
 # Returns
-- `Dict`: Mesh.
+- `Dict`: Material point gemetry.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cuboid
 cuboid = Cuboid([0.0 1.0; 0.0 1.0; 0.0 1.0])
 
-# Create a mesh
-mesh = create(cuboid)
+# Create a material-point-geometry.
+mpg =create(cuboid)
 ```
 
 # See also
@@ -157,36 +157,36 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
         N = Int64.(round.((c.bounds[:, 2] - c.bounds[:, 1])/resolution))
     end
     lattice = (c.bounds[:, 2] - c.bounds[:, 1]) ./ N
-    mesh = zeros(3, prod(N))
+    mpg =zeros(3, prod(N))
 
     if DEVICE[]==:cuda
-        mesh =  CUDA.CuArray(mesh)
+        mpg = CUDA.CuArray(mpg)
         culattice = CuArray(lattice)
         CuNb1 = CuArray([prod(N[1:j]) for j in 1:length(N)])
         CuNb2 = CuArray([prod(N[1:j-1]) for j in 1:length(N)])
 
-        function fillarray(mesh, lattice, N1, N2, low);
+        function fillarray(mpg, lattice, N1, N2, low);
             index = (blockIdx().x - 1) * blockDim().x + threadIdx().x
             stride = blockDim().x * gridDim().x
-            for k in index:stride:size(mesh, 2)
+            for k in index:stride:size(mpg, 2)
                 for j in 1:length(N1)
                     b1 = N1[j]
                     b2 = N2[j]
                     indexj = fld( (rem(k-1, b1) + 1) - 1, b2) + 1
-                    mesh[j, k] = low[j] - lattice[j] / 2 + indexj * lattice[j]
+                    mpg[j, k] = low[j] - lattice[j] / 2 + indexj * lattice[j]
                 end
             end
 
             return nothing
         end
 
-        kernel = CUDA.@cuda launch=false fillarray(mesh, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]))
+        kernel = CUDA.@cuda launch=false fillarray(mpg, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]))
         config = launch_configuration(kernel.fun)
-        nthreads = Base.min(size(mesh, 2), config.threads)
-        nblocks =  cld(size(mesh, 2), nthreads)
+        nthreads = Base.min(size(mpg, 2), config.threads)
+        nblocks =  cld(size(mpg, 2), nthreads)
 
-        CUDA.@sync kernel(mesh, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]); threads=nthreads, blocks=nblocks)
-        mesh = Array(mesh)
+        CUDA.@sync kernel(mpg, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]); threads=nthreads, blocks=nblocks)
+        mpg =Array(mpg)
 
     else
         a = 1
@@ -194,21 +194,21 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
         for I in R
             I_ = Tuple(I)
             Threads.@threads for i in eachindex(I_)
-                mesh[i, a] = c.bounds[i, 1] - lattice[i]/2 + I_[i]*lattice[i]
+                mpg[i, a] = c.bounds[i, 1] - lattice[i]/2 + I_[i]*lattice[i]
             end
             a += 1
         end
     end
 
-    mesh = mesh .+ (resolution*rand_  * (randn(size(mesh)...) .- 1.0))
-    volume = ones(eltype(mesh), prod(N))
+    mpg =mpg.+ (resolution*rand_  * (randn(size(mpg)...) .- 1.0))
+    volume = ones(eltype(mpg), prod(N))
     fill!(volume, prod(lattice))
-    type = type*ones(Int64, prod(N))
+    type = type*ones(Int, prod(N))
 
     return Dict(
-        :x => mesh,
-        :v => 0*mesh,
-        :y => copy(mesh),
+        :x => mpg,
+        :v => 0*mpg,
+        :y => copy(mpg),
         :volume => volume,
         :type => type
         )

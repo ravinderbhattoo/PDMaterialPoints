@@ -1,7 +1,7 @@
 # Index
 
 ```@index
-Modules = [PDMesh]
+Modules = [PDMaterialPoints]
 ```
 
 

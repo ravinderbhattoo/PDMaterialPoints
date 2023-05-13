@@ -1,22 +1,22 @@
 export changetype
 
 """
-    changetype(type::Array{Int64,1}, mask, ntype::Int)
+    changetype(type::Array{Int,1}, mask, ntype::Int)
 
-Change mesh particle type for object using boolean array mask.
+Change material point type for object using boolean array mask.
 
 # Arguments
-- `type::Array{Int64,1}`: Array of particle types.
+- `type::Array{Int,1}`: Array of particle types.
 - `mask`: Boolean array.
 - `ntype::Int`: New particle type.
 
 # Returns
-- `type::Array{Int64,1}`: Array of particle types.
+- `type::Array{Int,1}`: Array of particle types.
 
 # See also
 - [`changetype(obj::T, f::Function, ntype::Int) where T <: SuperShape`](@ref)
 """
-function changetype(type::Array{Int64,1}, mask, ntype::Int)
+function changetype(type::Array{Int,1}, mask, ntype::Int)
     type[mask] .= ntype
     return type
 end
@@ -24,7 +24,7 @@ end
 """
     changetype(obj::T, f::Function, ntype::Int) where T <: SuperShape
 
-Change mesh particle type for object using function f.
+Change material point type for object using function f.
 
 # Arguments
 - `obj::T`: Object.
@@ -35,20 +35,20 @@ Change mesh particle type for object using function f.
 - `obj::T`: Object.
 
 # See also
-- [`changetype(type::Array{Int64,1}, mask, ntype::Int)`](@ref)
+- [`changetype(type::Array{Int,1}, mask, ntype::Int)`](@ref)
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a disk
 disk = Disk(1.0, 0.1)
 
-# Create a mesh
-mesh = create(disk, resolution=0.1)
+# Create a material-point-geometry.
+mpg =create(disk, resolution=0.1)
 
 # Change particle type
-mesh = changetype(mesh, out -> out['x'][:, 1] .> 0.0, 2)
+mpg =changetype(mpg, out -> out['x'][:, 1] .> 0.0, 2)
 ```
 """
 function changetype(obj::T, f::Function, ntype::Int) where T <: SuperShape

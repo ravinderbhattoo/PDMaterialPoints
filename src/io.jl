@@ -46,7 +46,7 @@ Write data to a file in the following format:
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cube
 cube = Cube(1.0, 1.0, 1.0)
@@ -92,7 +92,7 @@ Write data to a file in the following format:
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cube
 cube = Cube(1.0, 1.0, 1.0)

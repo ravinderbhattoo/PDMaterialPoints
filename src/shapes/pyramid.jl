@@ -11,13 +11,13 @@ Pyramid shape.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a Pyramid
 Pyramid = Pyramid(60.0)
 
-# Create a mesh
-mesh = create(Pyramid)
+# Create a material-point-geometry.
+mpg =create(Pyramid)
 ```
 
 # See also
@@ -60,13 +60,13 @@ Indentor shape. A special case of Pyramid.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a Indentor
 Indentor = Indentor(60.0, 1.0)
 
-# Create a mesh
-mesh = create(Indentor)
+# Create a material-point-geometry.
+mpg =create(Indentor)
 ```
 
 # See also

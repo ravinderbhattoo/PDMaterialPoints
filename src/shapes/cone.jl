@@ -12,13 +12,13 @@ Cone shape.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cone
 cone = Cone(1.0, 1.0)
 
-# Create a mesh
-mesh = create(cone; resolution=0.1, rand_=0.01, type=1)
+# Create a material-point-geometry.
+mpg =create(cone; resolution=0.1, rand_=0.01, type=1)
 ```
 
 # See also
@@ -60,13 +60,13 @@ Standard cone shape. A special case of Cone. Radius and length are 1.0.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a standard cone
 cone = StandardCone()
 
-# Create a mesh
-mesh = create(cone)
+# Create a material-point-geometry.
+mpg =create(cone)
 ```
 
 # See also
@@ -82,26 +82,26 @@ end
 """
     create(c::Cone; resolution=nothing, rand_=0.0, type::Int=1)
 
-Create a mesh of a cone.
+Create a material-point-geometry of a cone.
 
 # Arguments
 - `c::Cone`: Cone shape.
-- `resolution=nothing`: Resolution of the mesh.
+- `resolution=nothing`: Resolution of the material-point-geometry.
 - `rand_=0.0`: Randomization factor.
-- `type::Int=1`: Type of the mesh.
+- `type::Int=1`: Type of the material-point-geometry.
 
 # Returns
-- `Dict`: Mesh.
+- `Dict`: Material point gemetry.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a cone
 cone = Cone(1.0, 1.0)
 
-# Create a mesh
-mesh = create(cone)
+# Create a material-point-geometry.
+mpg =create(cone)
 ```
 
 # See also
@@ -116,6 +116,6 @@ function create(c::Cone; resolution=nothing, rand_=0.0, type::Int=1)
     z = @view x[3:3, :]
 
     mask = vec(sum(X.^2, dims=1) .<= ((length_ .- z)./length_.*radius).^2)
-    mesh = x[:, mask]
-    return Dict(:x => mesh, :v => 0*mesh, :y => copy(mesh), :volume => vol[mask], :type => type*ones(Int64, sum(mask)))
+    mpg =x[:, mask]
+    return Dict(:x => mpg, :v => 0*mpg, :y => copy(mpg), :volume => vol[mask], :type => type*ones(Int, sum(mask)))
 end

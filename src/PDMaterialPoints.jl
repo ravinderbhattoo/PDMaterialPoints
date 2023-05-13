@@ -1,4 +1,4 @@
-module PDMesh
+module PDMaterialPoints
 using CUDA
 # Write your package code here.
 
@@ -14,7 +14,7 @@ Set the device to use for computations. The device can be either `:cpu` or `:cud
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Set the device to use for computations
 set_device(:cuda)
@@ -23,7 +23,7 @@ set_device(:cuda)
 function set_device(device::Symbol)
     device = get_valid_device(device)
     DEVICE[] = device
-    println("PDMesh: DEVICE set to $(DEVICE[])")
+    println("PDMaterialPoints: DEVICE set to $(DEVICE[])")
 end
 
 """
@@ -40,7 +40,7 @@ function get_valid_device(x::Symbol)
     if x==:cuda
         if !CUDA.functional()
             out = :cpu
-            println("PDMesh: CUDA is not available.")
+            println("PDMaterialPoints: CUDA is not available.")
         end
     else
         out = :cpu

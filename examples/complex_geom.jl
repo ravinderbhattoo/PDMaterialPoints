@@ -1,4 +1,4 @@
-using PDMesh
+using PDMaterialPoints
 
 println("Creating a composite...")
 function rand_(a, b)

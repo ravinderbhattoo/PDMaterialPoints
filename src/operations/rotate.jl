@@ -3,16 +3,16 @@ export rotate
 """
     rotate(x::Array{Float64,2}; angle=0.0, point=[0.0, 0.0, 0.0], vector_=[1.0, 0.0, 0.0])
 
-Rotate mesh particles for object by given angle about given vector and point.
+Rotate material points for object by given angle about given vector and point.
 
 # Arguments
-- `x::Array{Float64,2}`: Array of mesh particles.
+- `x::Array{Float64,2}`: Array of material points.
 - `angle=0.0`: Rotation angle.
 - `point=[0.0, 0.0, 0.0]`: Rotation point.
 - `vector_=[1.0, 0.0, 0.0]`: Rotation vector.
 
 # Returns
-- `x::Array{Float64,2}`: Array of mesh particles.
+- `x::Array{Float64,2}`: Array of material points.
 
 # See also
 - [`rotate`](@ref)

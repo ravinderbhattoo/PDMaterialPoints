@@ -59,12 +59,12 @@ Abstact function for creating **Shape** objects.
 
 # Arguments
 - `shape::T`: Shape object.
-- `resolution=nothing`: Resolution of the mesh.
+- `resolution=nothing`: Resolution of the material-point-geometry.
 - `rand_=0.0`: Randomization factor.
-- `type::Int=1`: Type of the mesh.
+- `type::Int=1`: Type of the material-point-geometry.
 
 # Returns
-- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+- `out::Dict{Symbol, Any}`: Dictionary containing the material-point-geometry data.
 """
 function create(shape::T; resolution=nothing, rand_=0.0, type::Int=1) where T <: Shape
     error("Not implemented for type **$(typeof(shape))** yet.")
@@ -74,13 +74,13 @@ end
 """
     make(shape::T) where T <: Shape
 
-Create a mesh from a shape. This function is a wrapper for the create function. It is used to create a mesh from a shape with default arguments.
+Create a material-point-geometry from a shape. This function is a wrapper for the create function. It is used to create a material-point-geometry from a shape with default arguments.
 
 # Arguments
 - `shape::T`: Shape object.
 
 # Returns
-- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+- `out::Dict{Symbol, Any}`: Dictionary containing the material-point-geometry data.
 """
 function make(shape::T) where T <: SuperShape
     create(shape; resolution=0.1, rand_=0.01, type=1)
@@ -90,7 +90,7 @@ end
 """
     create(pobj::PostOpObj, args...; kwargs...)
 
-Create a mesh from a post operation object.
+Create a material-point-geometry from a post operation object.
 
 # Arguments
 - `pobj::PostOpObj`: Post operation object.
@@ -98,7 +98,7 @@ Create a mesh from a post operation object.
 - `kwargs...`: Keyword arguments to be passed to the create function.
 
 # Returns
-- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+- `out::Dict{Symbol, Any}`: Dictionary containing the material-point-geometry data.
 """
 function create(pobj::PostOpObj, args...; kwargs...)
     temp = nothing
@@ -169,8 +169,8 @@ Unpack a dictionary into its components.
 - `x::Array{Float64, 1}`: x coordinates.
 - `v::Array{Float64, 1}`: v coordinates.
 - `y::Array{Float64, 1}`: y coordinates.
-- `volume::Array{Float64, 1}`: Volume of the mesh.
-- `type::Array{Int64, 1}`: Type of the mesh.
+- `volume::Array{Float64, 1}`: Volume of the material-point-geometry.
+- `type::Array{Int, 1}`: Type of the material-point-geometry.
 """
 function unpack(d::Dict)
     return d[:x], d[:v], d[:y], d[:volume], d[:type]

@@ -3,14 +3,14 @@ export move
 """
     move(x::Array{Float64,2}; by=[0.0, 0.0, 0.0])
 
-Move mesh particles for object by given "by".
+Move material points for object by given "by".
 
 # Arguments
-- `x::Array{Float64,2}`: Array of mesh particles.
+- `x::Array{Float64,2}`: Array of material points.
 - `by=[0.0, 0.0, 0.0]`: Translation vector.
 
 # Returns
-- `x::Array{Float64,2}`: Array of mesh particles.
+- `x::Array{Float64,2}`: Array of material points.
 
 # See also
 - [`move`](@ref)
@@ -24,7 +24,7 @@ end
 """
     move(obj::T; by=[0.0, 0.0, 0.0]) where T
 
-Move mesh particles for object by given "by".
+Move material points for object by given "by".
 
 # Arguments
 - `obj::T`: Object.
@@ -35,16 +35,16 @@ Move mesh particles for object by given "by".
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a disk
 disk = Disk(1.0, 0.1)
 
-# Create a mesh
-mesh = create(disk, resolution=0.1)
+# Create a material-point-geometry.
+mpg =create(disk, resolution=0.1)
 
 # Move particles
-mesh = move(mesh, by=[0.0, 0.0, 0.1])
+mpg =move(mpg, by=[0.0, 0.0, 0.1])
 ```
 
 # See also

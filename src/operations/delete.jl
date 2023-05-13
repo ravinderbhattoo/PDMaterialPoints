@@ -3,14 +3,14 @@ export delete
 """
     keepit(out, mask::BitArray)
 
-Keep mesh particles for object using boolean array mask.
+Keep material points for object using boolean array mask.
 
 # Arguments
-- `out`: Mesh data.
+- `out`: Material point gemetry data.
 - `mask::BitArray`: Boolean array.
 
 # Returns
-- `out`: Mesh data.
+- `out`: Material point gemetry data.
 """
 function keepit(out, mask::BitArray)
     return repack(out[:x][:, mask], out[:v][:, mask], out[:y][:, mask], out[:volume][mask], out[:type][mask])
@@ -19,7 +19,7 @@ end
 """
     delete(obj::T, f::Function) where T <: SuperShape
 
-Delete mesh particles for object using function f.
+Delete material points for object using function f.
 
 # Arguments
 - `obj::T`: Object.
@@ -30,16 +30,16 @@ Delete mesh particles for object using function f.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a disk
 disk = Disk(1.0, 0.1)
 
-# Create a mesh
-mesh = create(disk, resolution=0.1)
+# Create a material-point-geometry.
+mpg =create(disk, resolution=0.1)
 
 # Delete particles
-mesh = delete(mesh, out -> out['x'][:, 1] .> 0.0)
+mpg =delete(mpg, out -> out['x'][:, 1] .> 0.0)
 ```
 
 # See also

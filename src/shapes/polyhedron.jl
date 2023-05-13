@@ -2,7 +2,7 @@ export Polyhedron
 
 struct Polyhedron
     vertices::Array{Float64, 2}
-    faces::Array{Int64, 2}
+    faces::Array{Int, 2}
 end
 
 function inshape(x::Polyhedron, p::Array{Float64, 2})

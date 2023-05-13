@@ -12,13 +12,13 @@ Disk shape.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a disk
 disk = Disk(1.0, 0.1)
 
-# Create a mesh
-mesh = create(disk, resolution=0.1)
+# Create a material-point-geometry.
+mpg =create(disk, resolution=0.1)
 ```
 """
 mutable struct Disk <: Shape
@@ -35,13 +35,13 @@ Standard disk shape. A special case of Disk. Radius is 1.0. Thickness is 0.3.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a standard disk
 disk = StandardDisk()
 
-# Create a mesh
-mesh = create(disk)
+# Create a material-point-geometry.
+mpg =create(disk)
 ```
 
 # See also
@@ -62,26 +62,26 @@ end
 """
     create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
 
-Create a mesh from a disk.
+Create a material-point-geometry from a disk.
 
 # Arguments
 - `c::Disk`: Disk object.
-- `resolution=nothing`: Resolution of the mesh.
+- `resolution=nothing`: Resolution of the material-point-geometry.
 - `rand_=0.0`: Randomization factor.
-- `type::Int=1`: Type of the mesh.
+- `type::Int=1`: Type of the material-point-geometry.
 
 # Returns
-- `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
+- `out::Dict{Symbol, Any}`: Dictionary containing the material-point-geometry data.
 
 # Example
 ```julia
-using PDMesh
+using PDMaterialPoints
 
 # Create a disk
 disk = Disk(1.0, 0.1)
 
-# Create a mesh
-mesh = create(disk, resolution=0.1)
+# Create a material-point-geometry.
+mpg =create(disk, resolution=0.1)
 ```
 """
 function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
@@ -95,14 +95,14 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
     er_size = (radius-e_size/2) / nm_radial_ele
     nm_thickness = round(thickness/e_size)
     et_size = (thickness/nm_thickness)
-    mesh = Vector{Float64}[]
+    mpg =Vector{Float64}[]
     vol = Float64[]
     total_vol = 0
 
     for i in 1:nm_thickness
         z = (i - 0.5)*et_size
         total_vol += et_size*pi*e_size^2
-        push!(mesh, [0, 0.0, z + rand_*randn()*et_size])
+        push!(mpg, [0, 0.0, z + rand_*randn()*et_size])
         push!(vol, et_size*pi*e_size^2)
         for j in 1:nm_radial_ele
             r_in = e_size/2 + (j-1) * er_size
@@ -121,19 +121,19 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
                 y = r_g * sin((k-1)*theta) + rand_*randn()*e_size
 
                 push!(vol, e_area * et_size)
-                push!(mesh, [x, y, z + rand_*randn()*et_size])
+                push!(mpg, [x, y, z + rand_*randn()*et_size])
                 total_vol += e_area * et_size
             end
         end
     end
 
-    mesh = hcat(mesh...)
+    mpg = hcat(mpg...)
 
     return Dict(
-        :x => mesh,
-        :v => 0*mesh,
-        :y => copy(mesh),
+        :x => mpg,
+        :v => 0*mpg,
+        :y => copy(mpg),
         :volume => vol,
-        :type => type*ones(Int64, length(vol)),
+        :type => type*ones(Int, length(vol)),
     )
 end

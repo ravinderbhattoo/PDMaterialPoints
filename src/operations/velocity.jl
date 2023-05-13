@@ -6,11 +6,11 @@ export velocity
 Change velocity of particles for object by given "velocity".
 
 # Arguments
-- `v::Array{Float64,2}`: Array of mesh velocities.
+- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
 - `velocity=[0.0, 0.0, 0.0]`: Velocity vector.
 
 # Returns
-- `v::Array{Float64,2}`: Array of mesh velocities.
+- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
 
 """
 function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,1})
@@ -25,11 +25,11 @@ end
 Change velocity of particles for object by given "velocity".
 
 # Arguments
-- `v::Array{Float64,2}`: Array of mesh velocities.
+- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
 - `velocity=[0.0, 0.0, 0.0]`: Velocity vector.
 
 # Returns
-- `v::Array{Float64,2}`: Array of mesh velocities.
+- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
 
 """
 function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,2})

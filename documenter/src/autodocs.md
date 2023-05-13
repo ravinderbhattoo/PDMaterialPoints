@@ -1,7 +1,7 @@
-Autodocs are generated for PDMesh using **Documenter.jl**.
+Autodocs are generated for PDMaterialPoints using **Documenter.jl**.
 
 ```@autodocs
-Modules = [PDMesh]
+Modules = [PDMaterialPoints]
 Private = false
 Order = [:type, :function]
 ```

@@ -1,4 +1,4 @@
-using PDMesh
+using PDMaterialPoints
 using Test
 
 @testset "Shapes" begin
@@ -18,7 +18,7 @@ end
     @test out2[:x] ≈ out[:x] .+ [1.0, 1.0, 1.0]
 
     out2 = create(changetype(cube, out -> out[:type] .== 1, 2), resolution=0.2)
-    @test out2[:type] ≈ ones(Int64, size(out[:type])) .* 2
+    @test out2[:type] ≈ ones(Int, size(out[:type])) .* 2
 
     vrand = rand(3)
     out2 = create(velocity(cube, out -> out[:type] .== 1, vrand), resolution=0.2)

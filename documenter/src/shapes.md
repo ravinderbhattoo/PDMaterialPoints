@@ -1,6 +1,6 @@
 # Shapes
 
-This page lists the shapes that are available in PDMesh. These shapes can be used to create meshes (see [`create`](@ref)), which can then be used for simulations. The following shapes are available:
+This page lists the shapes that are available in PDMaterialPoints. These shapes can be used to create material-point-geometries (see [`create`](@ref)), which can then be used for simulations. The following shapes are available:
 
 - [`Cone`](@ref)
 - [`Cuboid`](@ref)

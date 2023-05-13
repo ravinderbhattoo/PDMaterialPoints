@@ -1,9 +1,9 @@
 # Operations
 
-This section lists the operations that can be performed on [`Shape`](@ref) and [`PostOpObj`](@ref). These operations can be used to modify the shape and position of a mesh. For example, here is how to rotate a mesh:
+This section lists the operations that can be performed on [`Shape`](@ref) and [`PostOpObj`](@ref). These operations can be used to modify the shape and position of a material-point-geometry. For example, here is how to rotate a material point geometry:
 
 ```julia
-using PDMesh
+using PDMaterialPoints
 cube = create(Cube(10.0), resolution=0.5, rand_=0.0)
 cube_rotated = rotate(cube, angle=45, point=[0, 0, 0], vector_=[1, 0, 0])
 ```

@@ -3,18 +3,18 @@ using Pkg; Pkg.activate("."); Pkg.instantiate()
 Pkg.add(["Documenter", "DocThemeIndigo", "Dates"])
 Pkg.develop(PackageSpec(path=".."))
 
-using Documenter, DocThemeIndigo, PDMesh, Dates
+using Documenter, DocThemeIndigo, PDMaterialPoints, Dates
 
-indigo = DocThemeIndigo.install(PDMesh)
+indigo = DocThemeIndigo.install(PDMaterialPoints)
 
-makedocs(sitename="PDMesh.jl";
+makedocs(sitename="PDMaterialPoints.jl";
     build="../docs",
     format = Documenter.HTML(
     footer="Updated: $(now()). "*string(Documenter.HTML().footer),
     prettyurls = get(ENV, "CI", nothing) == "true",
     assets=String[]
     ),
-    modules=[PDMesh],
+    modules=[PDMaterialPoints],
     pages = [
         "Home" => "index.md",
         "Table of contents" => "toc.md",
