@@ -1,7 +1,7 @@
 name = "PDMaterialPoints"
 uuid = "699b3a5d-6dba-4e2a-88ec-3ad113d1b49e"
 authors = ["Ravinder Bhattoo"]
-version = "0.1.1"
+version = "0.2.1"
 
 [deps]
 CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
