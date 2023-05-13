@@ -38,7 +38,7 @@ function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,2})
 end
 
 """
-    velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
+    velocity(obj::T, f::Function, vel) where T <: SuperShape
 
 Change velocity of particles for object using boolean array from function f.
 
@@ -51,7 +51,7 @@ Change velocity of particles for object using boolean array from function f.
 - `obj::T`: Object.
 
 """
-function velocity(obj::T, f::Function, vel) where T <: Union{Shape, PostOpObj}
+function velocity(obj::T, f::Function, vel) where T <: SuperShape
     # x, v, y, vol, type
     function func(out)
         v = out[:v]

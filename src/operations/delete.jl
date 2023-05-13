@@ -17,7 +17,7 @@ function keepit(out, mask::BitArray)
 end
 
 """
-    delete(obj::T, f::Function) where T <: Union{Shape, PostOpObj}
+    delete(obj::T, f::Function) where T <: SuperShape
 
 Delete mesh particles for object using function f.
 

@@ -1,4 +1,4 @@
-# PDMesh
+# PDMesh.jl
 
 ```@raw html
 <img src="assets/logo.png" style="width:50%;background-color:white;display:block;margin:auto"/>
@@ -35,7 +35,7 @@ This will create a cube and then rotate it 45 degrees around the x-axis.
 
 ### Combining Shapes
 
-PDMesh allows for combining different shapes together to create more complex geometries. This can be achieved using the `combine` function. For example, here is how to combine two cubes:
+PDMesh allows for combining different shapes together to create more complex geometries. This can be achieved using the [`combine`](@ref) function. For example, here is how to combine two cubes:
 
 ```julia
 using PDMesh
@@ -51,7 +51,7 @@ mesh = create(cube; resolution=0.5)
 This will create two cubes and then combine them into one.
 ### Changing Mesh Types
 
-PDMesh provides a `changetype` function to change the type of elements in a mesh. This can be used to modify the type of a mesh particle. For example, here is how to change the type of all elements in a mesh to 2:
+PDMesh provides a [`changetype`](@ref) function to change the type of elements in a mesh. This can be used to modify the type of a mesh particle. For example, here is how to change the type of all elements in a mesh to 2:
 
 ```julia
 using PDMesh

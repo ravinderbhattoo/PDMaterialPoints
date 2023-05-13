@@ -2,7 +2,7 @@
 export create, Cube, Cuboid, StandardCuboid
 
 """
-    Cuboid
+    Cuboid(bounds::Array{Float64, 2})
 
 Cuboid shape.
 
@@ -66,8 +66,34 @@ function Cube(L)
     Cuboid([-L/2 L/2; -L/2 L/2; -L/2 L/2])
 end
 
-Cube() = Cube(1.0)
-Cuboid() = Cube()
+"""
+    Cube()
+
+Cube shape. A special case of Cuboid. Length is 1.0.
+
+# see also
+- [`create`](@ref)
+- [`StandardCuboid`](@ref)
+
+"""
+function Cube()
+    Cube(1.0)
+end
+
+"""
+    Cuboid()
+
+Cuboid shape. Bounds are [-0.5 0.5; -0.5 0.5; -0.5 0.5]. Length is 1.0.
+
+# see also
+- [`create`](@ref)
+- [`StandardCuboid`](@ref)
+
+"""
+function Cuboid()
+    Cube()
+end
+
 
 """
     StandardCuboid()

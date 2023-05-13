@@ -24,8 +24,8 @@ function apply!(obj::T, func::Vector{Function}) where T <: PostOpObj
     return obj
 end
 
+include("./changetype.jl")
+include("./delete.jl")
 include("./move.jl")
 include("./rotate.jl")
-include("./delete.jl")
-include("./changetype.jl")
 include("./velocity.jl")

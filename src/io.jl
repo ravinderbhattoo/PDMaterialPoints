@@ -1,4 +1,4 @@
-export write_data
+export write_data, write_data_peridigm
 
 """
     fhandle(filename::String)
@@ -21,7 +21,7 @@ end
 
 
 """
-    write_data(filename::String, obj::Union{Shape,PostOpObj}; kwargs...)
+    write_data(filename::String, obj::SuperShape; kwargs...)
 
 Write data to a file in the following format:
 
@@ -39,7 +39,7 @@ Write data to a file in the following format:
 
 # Arguments
 - `filename::String`: Name of the file to write to.
-- `obj::Union{Shape,PostOpObj}`: Shape or post operation object to write to file.
+- `obj::SuperShape`: Shape or post operation object to write to file.
 
 # Keyword Arguments
 - `kwargs...`: Keyword arguments to pass to [`create`](@ref).
@@ -59,7 +59,7 @@ write_data("data.txt", cube)
 - [`write_data_peridigm`](@ref)
 - [`write_data`](@ref)
 """
-function write_data(filename::String, obj::Union{Shape,PostOpObj}; kwargs...)
+function write_data(filename::String, obj::SuperShape; kwargs...)
     out = create(obj; kwargs...)
     write_data(filename, out)
 end
@@ -134,6 +134,10 @@ position is the particle position, and volume is the particle volume.
 - `x::Matrix`: Position of the particles.
 - `type::Vector`: Type of the particles.
 - `vol::Vector`: Volume of the particles.
+
+# see also
+- [`write_data`](@ref)
+
 """
 function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Vector)
     file = fhandle(filename)
@@ -173,6 +177,9 @@ volume is the particle volume.
 - `v::Matrix`: Velocity of the particles.
 - `type::Vector`: Type of the particles.
 - `vol::Vector`: Volume of the particles.
+
+# see also
+- [`write_data`](@ref)
 
 """
 function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)

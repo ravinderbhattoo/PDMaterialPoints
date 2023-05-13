@@ -51,7 +51,7 @@ mesh = move(mesh, by=[0.0, 0.0, 0.1])
 - [`move`](@ref)
 
 """
-function move(obj::T; by=[0.0, 0.0, 0.0]) where T <: Union{Shape, PostOpObj}
+function move(obj::T; by=[0.0, 0.0, 0.0]) where T <: SuperShape
     # x, v, y, vol, type
     function func(out)
         x = out[:x]

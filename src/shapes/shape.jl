@@ -3,11 +3,18 @@
 export Shape, PostOpObj, create, make, combine, unpack, repack, repack!
 
 """
+    SuperShape
+
+Abstract type for supershapes.
+"""
+abstract type SuperShape end
+
+"""
     Shape
 
 Abstract type for shapes.
 """
-abstract type Shape end
+abstract type Shape <: SuperShape end
 
 """
     PostOpObj
@@ -22,7 +29,7 @@ Operations will be applied while a create call.
 - `operations::Array{Function}`: Operations to be applied.
 
 """
-mutable struct PostOpObj
+mutable struct PostOpObj <: SuperShape
     name::String
     objs::Vector{Any}
     operations::Array{Function}
@@ -39,7 +46,7 @@ end
 
 Base.show(io::IO, obj::PostOpObj) = print(io, obj.name)
 
-function Base.copy(x::T) where T<:Union{Shape, PostOpObj}
+function Base.copy(x::T) where T<:SuperShape
     T(copy.([getfield(x, fn) for fn in fieldnames(T)])...)
 end
 
@@ -75,7 +82,7 @@ Create a mesh from a shape. This function is a wrapper for the create function. 
 # Returns
 - `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
 """
-function make(shape::T) where T <: Union{Shape, PostOpObj}
+function make(shape::T) where T <: SuperShape
     create(shape; resolution=0.1, rand_=0.01, type=1)
 end
 
@@ -113,17 +120,17 @@ function create(pobj::PostOpObj, args...; kwargs...)
     return out
 end
 
-function Base.:+(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+function Base.:+(obj1::T1, obj2::T2) where {T1<:SuperShape, T2<:SuperShape}
     PostOpObj([obj1, obj2], [])
 end
 
-function Base.:+(obj1::T1, obj2::Nothing) where {T1<:Union{Shape, PostOpObj}}
+function Base.:+(obj1::T1, obj2::Nothing) where {T1<:SuperShape}
     PostOpObj([obj1], [])
 end
 
 
 """
-    add(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+    add(obj1::T1, obj2::T2) where {T1<:SuperShape, T2<:SuperShape}
 
 Add two objects.
 
@@ -137,7 +144,7 @@ function add(obj1, obj2)
 end
 
 """
-    combine(obj1::T1, obj2::T2) where {T1<:Union{Shape, PostOpObj}, T2<:Union{Shape, PostOpObj}}
+    combine(obj1::T1, obj2::T2) where {T1<:SuperShape, T2<:SuperShape}
 
 Combine two objects. Duplicate of add.
 """
@@ -145,7 +152,7 @@ function combine(obj1, obj2)
     obj1 + obj2
 end
 
-function Base.:+(obj1::Nothing, obj2::T1) where {T1<:Union{Shape, PostOpObj}}
+function Base.:+(obj1::Nothing, obj2::T1) where {T1<:SuperShape}
     obj2 + obj1
 end
 
@@ -221,11 +228,11 @@ function mycat(a, b)
     end
 end
 
-include("./cuboid.jl")
-include("./sphere.jl")
-include("./disk.jl")
-include("./cylinder.jl")
 include("./cone.jl")
+include("./cuboid.jl")
+include("./cylinder.jl")
+include("./disk.jl")
 include("./pyramid.jl")
+include("./sphere.jl")
 
 

@@ -81,12 +81,12 @@ function Base.show(io::IO, x::Sphere)
 end
 
 """
-    create(s::Union{Sphere,Shell}; resolution=nothing, rand_=0.0, type::Int=1)
+    create(s::Sphere; resolution=nothing, rand_=0.0, type::Int=1)
 
 Create a mesh from a sphere or shell.
 
 # Arguments
-- `s::Union{Sphere,Shell}`: Sphere or shell object.
+- `s::Sphere`: Sphere object.
 - `resolution=nothing`: Resolution of the mesh.
 - `rand_=0.0`: Randomization factor.
 - `type::Int=1`: Type of the mesh.
@@ -94,8 +94,27 @@ Create a mesh from a sphere or shell.
 # Returns
 - `out::Dict{Symbol, Any}`: Dictionary containing the mesh data.
 """
-function create(c::Union{Sphere,Shell}; resolution=nothing, rand_=0.0, type::Int=1)
+function create(c::Sphere; resolution=nothing, rand_=0.0, type::Int=1)
     radius = c.radius
+    bounds = [-radius radius; -radius radius; -radius radius]
+    x, v, y, vol, type_ = unpack(create(Cuboid(bounds), resolution=resolution, rand_=rand_, type=type))
+    mask = vec(sum(x.^2, dims=1) .<= radius^2)
+    mesh = x[:, mask]
+    vol = vol[mask]
+    type_ = type_[mask]
+
+    return Dict(
+        :x => mesh,
+        :v => 0*mesh,
+        :y => copy(mesh),
+        :volume => vol,
+        :type => type_
+    )
+end
+
+function create(c::Shell; resolution=nothing, rand_=0.0, type::Int=1)
+    radius = c.radius
+    inner_radius = c.inner_radius
     bounds = [-radius radius; -radius radius; -radius radius]
     x, v, y, vol, type_ = unpack(create(Cuboid(bounds), resolution=resolution, rand_=rand_, type=type))
     mask = vec(sum(x.^2, dims=1) .<= radius^2)
@@ -105,6 +124,11 @@ function create(c::Union{Sphere,Shell}; resolution=nothing, rand_=0.0, type::Int
     end
 
     mesh = x[:, mask]
+    vol = vol[mask]
+    type_ = type_[mask]
+
+    mask = vec(sum(x.^2, dims=1) .>= inner_radius^2)
+    mesh = mesh[:, mask]
     vol = vol[mask]
     type_ = type_[mask]
 

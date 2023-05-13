@@ -2,7 +2,7 @@
 export create, Cone, StandardCone
 
 """
-    Cone
+    Cone(radius::AbstractFloat, length::AbstractFloat)
 
 Cone shape.
 
@@ -18,10 +18,12 @@ using PDMesh
 cone = Cone(1.0, 1.0)
 
 # Create a mesh
-mesh = create(cone)
+mesh = create(cone; resolution=0.1, rand_=0.01, type=1)
 ```
 
 # See also
+- [`StandardCone()`](@ref)
+- [`Cone()`](@ref)
 - [`create`](@ref)
 
 # References
@@ -39,7 +41,17 @@ function Base.show(io::IO, x::Cone)
     println(io, "Length: $(x.length)")
 end
 
-Cone() = Cone(1.0, 1.0)
+"""
+    Cone()
+
+Cone shape. Radius and length are 1.0.
+
+# see also
+- [`Cone`](@ref)
+"""
+function Cone()
+    Cone(1.0, 1.0)
+end
 
 """
     StandardCone()

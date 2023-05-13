@@ -1,13 +1,14 @@
-push!(LOAD_PATH,"../src/")
+using Pkg; Pkg.activate("."); Pkg.instantiate()
 
-using Documenter, DocThemeIndigo, PDMesh
-using Dates
+Pkg.add(["Documenter", "DocThemeIndigo", "Dates"])
+Pkg.develop(PackageSpec(path=".."))
+
+using Documenter, DocThemeIndigo, PDMesh, Dates
 
 indigo = DocThemeIndigo.install(PDMesh)
 
-makedocs(sitename="PDMesh";
+makedocs(sitename="PDMesh.jl";
     build="../docs",
-    sidebar_sitename=nothing,
     format = Documenter.HTML(
     footer="Updated: $(now()). "*string(Documenter.HTML().footer),
     prettyurls = get(ENV, "CI", nothing) == "true",
@@ -20,7 +21,7 @@ makedocs(sitename="PDMesh";
         "Examples" => "examples.md",
         "Shapes" => "shapes.md",
         "Operations" => "operations.md",
-        "Index" => "list.md",
+        "Index" => "indexlist.md",
         "Autodocs" => "autodocs.md",
     ]
 
