@@ -1,38 +1,38 @@
 export velocity
 
 """
-    velocity(v::Array{Float64,2}; velocity=[0.0, 0.0, 0.0])
+    velocity(v::Array{QF,2}; velocity=[0.0, 0.0, 0.0])
 
 Change velocity of particles for object by given "velocity".
 
 # Arguments
-- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
+- `v::Array{QF,2}`: Array of material-point-geometry velocities.
 - `velocity=[0.0, 0.0, 0.0]`: Velocity vector.
 
 # Returns
-- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
+- `v::Array{QF,2}`: Array of material-point-geometry velocities.
 
 """
-function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,1})
+function velocity(v::Array{QF,2}, mask, velocity::Array{QF,1})
     v[:, mask] .*= 0.0
     v[:, mask] .+= vec(velocity)
     return v
 end
 
 """
-    velocity(v::Array{Float64,2}; velocity=[0.0, 0.0, 0.0])
+    velocity(v::Array{QF,2}; velocity=[0.0, 0.0, 0.0])
 
 Change velocity of particles for object by given "velocity".
 
 # Arguments
-- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
+- `v::Array{QF,2}`: Array of material-point-geometry velocities.
 - `velocity=[0.0, 0.0, 0.0]`: Velocity vector.
 
 # Returns
-- `v::Array{Float64,2}`: Array of material-point-geometry velocities.
+- `v::Array{QF,2}`: Array of material-point-geometry velocities.
 
 """
-function velocity(v::Array{Float64,2}, mask, velocity::Array{Float64,2})
+function velocity(v::Array{QF,2}, mask, velocity::Array{QF,2})
     v[:, mask] .= velocity
     return v
 end

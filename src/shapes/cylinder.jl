@@ -7,9 +7,9 @@ export create, Cylinder, StandardCylinder
 Cylinder shape.
 
 # Fields
-- `radius::AbstractFloat`: Radius of the cylinder.
-- `thickness::AbstractFloat`: Thickness of the cylinder.
-- `length::AbstractFloat`: Length of the cylinder.
+- `radius::QF`: Radius of the cylinder.
+- `thickness::QF`: Thickness of the cylinder.
+- `length::QF`: Length of the cylinder.
 
 # Example
 ```julia
@@ -23,9 +23,9 @@ mpg =create(cylinder, resolution=0.1)
 ```
 """
 mutable struct Cylinder <: Shape
-    radius::AbstractFloat
-    thickness::AbstractFloat
-    length::AbstractFloat
+    radius::QF
+    thickness::QF
+    length::QF
 end
 
 Cylinder() = Cylinder(1.0, 0.3, 1.0)
@@ -142,7 +142,7 @@ function create(c::Cylinder; resolution=nothing, rand_=0.0, type::Int=1)
 
     return Dict(
         :x => mpg,
-        :v => 0*mpg,
+        :v => 0 * ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg),
         :y => copy(mpg),
         :volume => vol,
         :type => type*ones(Int, length(vol))

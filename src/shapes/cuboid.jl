@@ -2,12 +2,12 @@
 export create, Cube, Cuboid, StandardCuboid
 
 """
-    Cuboid(bounds::Array{Float64, 2})
+    Cuboid(bounds::Array{QF, 2})
 
 Cuboid shape.
 
 # Fields
-- `bounds::Array{Float64, 2}`: Bounds of the cuboid.
+- `bounds::Array{QF, 2}`: Bounds of the cuboid.
 
 # Example
 ```julia
@@ -28,7 +28,7 @@ mpg =create(cuboid)
 
 """
 mutable struct Cuboid <: Shape
-    bounds::Array{Float64, 2}
+    bounds::Array{QF, 2}
 end
 
 function Base.show(io::IO, x::Cuboid)
@@ -36,6 +36,19 @@ function Base.show(io::IO, x::Cuboid)
     for i in 1:size(x.bounds)[1]
         println(io, "Dimension $i: Low $(x.bounds[i, 1]) High $(x.bounds[i, 2])")
     end
+    println(io,"""\n
+     +-----------------------+ $(x.bounds[2, 2])
+    /|                      /|
+   / |                     / |
+  /  |                    /  |
+ +-----------------------+   |
+ |   +-------------------|---+ $(x.bounds[2, 1])
+ |  /                    |  / $(x.bounds[3, 2])
+ | /                     | /
+ |/                      |/
+ +-----------------------+ $(x.bounds[3, 1])
+$(x.bounds[1, 1])\t\t\t$(x.bounds[1, 2])
+""")
 end
 
 """
@@ -44,7 +57,7 @@ end
 Cube shape. A special case of Cuboid.
 
 # Arguments
-- `L::AbstractFloat`: Length of the cube.
+- `L::QF`: Length of the cube.
 
 # Example
 ```julia
@@ -154,16 +167,17 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
     if isa(resolution, Nothing)
         N = [10 for i in 1:size(c.bounds)[1]]
     else
-        N = Int64.(round.((c.bounds[:, 2] - c.bounds[:, 1])/resolution))
+        N = Int64.(round.((c.bounds[:, 2] - c.bounds[:, 1]) / resolution))
     end
     lattice = (c.bounds[:, 2] - c.bounds[:, 1]) ./ N
-    mpg =zeros(3, prod(N))
+    mpg = zeros(typeof(resolution), 3, prod(N))
 
     if DEVICE[]==:cuda
-        mpg = CUDA.CuArray(mpg)
+        mpg = CuArray(mpg)
         culattice = CuArray(lattice)
         CuNb1 = CuArray([prod(N[1:j]) for j in 1:length(N)])
         CuNb2 = CuArray([prod(N[1:j-1]) for j in 1:length(N)])
+        low = CuArray(1*c.bounds[:, 1])
 
         function fillarray(mpg, lattice, N1, N2, low);
             index = (blockIdx().x - 1) * blockDim().x + threadIdx().x
@@ -180,34 +194,34 @@ function create(c::Cuboid; resolution=nothing, rand_=0.0, type::Int=1)
             return nothing
         end
 
-        kernel = CUDA.@cuda launch=false fillarray(mpg, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]))
+        kernel = CUDA.@cuda launch=false fillarray(mpg, culattice, CuNb1, CuNb2, low)
         config = launch_configuration(kernel.fun)
         nthreads = Base.min(size(mpg, 2), config.threads)
         nblocks =  cld(size(mpg, 2), nthreads)
 
-        CUDA.@sync kernel(mpg, culattice, CuNb1, CuNb2, CuArray(c.bounds[:, 1]); threads=nthreads, blocks=nblocks)
-        mpg =Array(mpg)
+        CUDA.@sync kernel(mpg, culattice, CuNb1, CuNb2, low; threads=nthreads, blocks=nblocks)
+        mpg = Array(mpg)
 
     else
-        a = 1
         R = CartesianIndices(Tuple(N))
-        for I in R
+        Threads.@threads for j in 1:length(R)
+            I = R[j]
             I_ = Tuple(I)
-            Threads.@threads for i in eachindex(I_)
-                mpg[i, a] = c.bounds[i, 1] - lattice[i]/2 + I_[i]*lattice[i]
+            for i in eachindex(I_)
+                mpg[i, j] = c.bounds[i, 1] - lattice[i]/2 + I_[i]*lattice[i]
             end
-            a += 1
         end
     end
 
-    mpg =mpg.+ (resolution*rand_  * (randn(size(mpg)...) .- 1.0))
-    volume = ones(eltype(mpg), prod(N))
+    mpg = mpg.+ (resolution*rand_  * (randn(size(mpg)...) .- 1.0))
+    volume = ones(typeof(resolution^3), prod(N))
     fill!(volume, prod(lattice))
     type = type*ones(Int, prod(N))
+    v = 0 * ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg)
 
     return Dict(
         :x => mpg,
-        :v => 0*mpg,
+        :v => v,
         :y => copy(mpg),
         :volume => volume,
         :type => type

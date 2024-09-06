@@ -7,7 +7,7 @@ export create, Sphere, Shell, StandardSphere
 Sphere shape.
 
 # Fields
-- `radius::AbstractFloat`: Radius of the sphere.
+- `radius::QF`: Radius of the sphere.
 
 # Example
 ```julia
@@ -21,7 +21,7 @@ mpg =create(sphere, resolution=0.1)
 ```
 """
 mutable struct Sphere <: Shape
-    radius::AbstractFloat
+    radius::QF
 end
 
 Sphere() = Sphere(1.0)
@@ -56,8 +56,8 @@ end
 Shell shape.
 
 # Fields
-- `outer_radius::AbstractFloat`: Outer radius of the shell.
-- `inner_radius::AbstractFloat`: Inner radius of the shell.
+- `outer_radius::QF`: Outer radius of the shell.
+- `inner_radius::QF`: Inner radius of the shell.
 
 # Example
 ```julia
@@ -71,8 +71,8 @@ mpg =create(shell, resolution=0.1)
 ```
 """
 mutable struct Shell <: Shape
-    radius::AbstractFloat
-    inner_radius::AbstractFloat
+    radius::QF
+    inner_radius::QF
 end
 
 function Base.show(io::IO, x::Sphere)
@@ -105,7 +105,7 @@ function create(c::Sphere; resolution=nothing, rand_=0.0, type::Int=1)
 
     return Dict(
         :x => mpg,
-        :v => 0*mpg,
+        :v => 0 * ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg),
         :y => copy(mpg),
         :volume => vol,
         :type => type_
@@ -134,7 +134,7 @@ function create(c::Shell; resolution=nothing, rand_=0.0, type::Int=1)
 
     return Dict(
         :x => mpg,
-        :v => 0*mpg,
+        :v => 0 * ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg),
         :y => copy(mpg),
         :volume => vol,
         :type => type_

@@ -7,8 +7,8 @@ export create, Disk, StandardDisk
 Disk shape.
 
 # Fields
-- `radius::AbstractFloat`: Radius of the disk.
-- `thickness::AbstractFloat`: Thickness of the disk.
+- `radius::QF`: Radius of the disk.
+- `thickness::QF`: Thickness of the disk.
 
 # Example
 ```julia
@@ -22,8 +22,8 @@ mpg =create(disk, resolution=0.1)
 ```
 """
 mutable struct Disk <: Shape
-    radius::AbstractFloat
-    thickness::AbstractFloat
+    radius::QF
+    thickness::QF
 end
 
 Disk() = Disk(1.0, 0.3)
@@ -91,28 +91,41 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
     radius=c.radius
     thickness=c.thickness
     e_size=resolution
-    nm_radial_ele = round((radius-e_size/2)/e_size)
+    nm_radial_ele = Int(round((radius-e_size/2)/e_size))
     er_size = (radius-e_size/2) / nm_radial_ele
-    nm_thickness = round(thickness/e_size)
+    nm_thickness = Int(round(thickness/e_size))
     et_size = (thickness/nm_thickness)
-    mpg =Vector{Float64}[]
-    vol = Float64[]
-    total_vol = 0
 
-    for i in 1:nm_thickness
+    nm_cir_eles = zeros(Int64, nm_radial_ele)
+    Threads.@threads for j in 1:nm_radial_ele
+        r_in = e_size/2 + (j-1) * er_size
+        r_out = e_size/2 + (j) * er_size
+        nm_cir_ele = Int(round(( pi * (r_in+r_out) ) / e_size ))
+        nm_cir_eles[j] = nm_cir_ele
+    end
+    nm_one_layer = sum(nm_cir_eles)
+    total_number = (nm_one_layer + 1) * nm_thickness
+
+    mpg = zeros(typeof(resolution), 3, total_number)
+    vol = zeros(typeof(resolution^3), total_number)
+
+    Threads.@threads for i in 1:nm_thickness
+        l_start = (i-1)*(nm_one_layer+1) + 1
         z = (i - 0.5)*et_size
-        total_vol += et_size*pi*e_size^2
-        push!(mpg, [0, 0.0, z + rand_*randn()*et_size])
-        push!(vol, et_size*pi*e_size^2)
+        mpg[1, l_start] = rand_*randn()*e_size
+        mpg[2, l_start] = rand_*randn()*e_size
+        mpg[3, l_start] = z + rand_*randn()*et_size
+        vol[l_start] = et_size * er_size^2
+
+        ind2 = 1
         for j in 1:nm_radial_ele
             r_in = e_size/2 + (j-1) * er_size
             r_out = e_size/2 + (j) * er_size
-
-            nm_cir_ele = round(( pi * (r_in+r_out) ) / e_size )
+            nm_cir_ele = nm_cir_eles[j]
             ec_size = ( pi * (r_in+r_out) ) / nm_cir_ele
 
             for k in 1:nm_cir_ele
-
+                ind = l_start + ind2
                 theta = 2*pi / nm_cir_ele
                 e_area = pi* (r_out^2 - r_in^2) / nm_cir_ele
                 r_g = (2 * pi * (r_out^3 - r_in^3) * sin(theta)/ 3 / theta ) / e_area / nm_cir_ele
@@ -120,18 +133,20 @@ function create(c::Disk; resolution=nothing, rand_=0.0, type::Int=1)
                 x = r_g * cos((k-1)*theta) + rand_*randn()*e_size
                 y = r_g * sin((k-1)*theta) + rand_*randn()*e_size
 
-                push!(vol, e_area * et_size)
-                push!(mpg, [x, y, z + rand_*randn()*et_size])
-                total_vol += e_area * et_size
+                mpg[1, ind] = x
+                mpg[2, ind] = y
+                mpg[3, ind] = z + rand_*randn()*et_size
+                vol[ind] =  ec_size * er_size * et_size
+                ind2 += 1
             end
         end
     end
 
-    mpg = hcat(mpg...)
+    println("Volume coverd for $(typeof(c)): $(round(sum(vol) / (pi*radius^2*thickness)* 100; digits=2)) %")
 
     return Dict(
         :x => mpg,
-        :v => 0*mpg,
+        :v => 0 * ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg),
         :y => copy(mpg),
         :volume => vol,
         :type => type*ones(Int, length(vol)),

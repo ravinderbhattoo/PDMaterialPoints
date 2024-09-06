@@ -1,22 +1,22 @@
 export move
 
 """
-    move(x::Array{Float64,2}; by=[0.0, 0.0, 0.0])
+    move(x::Array{QF,2}; by=[0.0, 0.0, 0.0])
 
 Move material points for object by given "by".
 
 # Arguments
-- `x::Array{Float64,2}`: Array of material points.
+- `x::Array{QF,2}`: Array of material points.
 - `by=[0.0, 0.0, 0.0]`: Translation vector.
 
 # Returns
-- `x::Array{Float64,2}`: Array of material points.
+- `x::Array{QF,2}`: Array of material points.
 
 # See also
 - [`move`](@ref)
 
 """
-function move(x::Array{Float64,2}; by=[0.0, 0.0, 0.0])
+function move(x::Array{<:QF,2}; by=[0.0, 0.0, 0.0])
     x .+= vec(by)
     return x
 end

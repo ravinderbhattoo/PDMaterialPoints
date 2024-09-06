@@ -1,15 +1,15 @@
 export Polyhedron
 
 struct Polyhedron
-    vertices::Array{Float64, 2}
+    vertices::Array{QF, 2}
     faces::Array{Int, 2}
 end
 
-function inshape(x::Polyhedron, p::Array{Float64, 2})
+function inshape(x::Polyhedron, p::Array{QF, 2})
     inpolyhedron(x, p)
 end
 
-function inpolyhedron(poly::Polyhedron, point::Array{Float64, 1})
+function inpolyhedron(poly::Polyhedron, point::Array{QF, 1})
     vertices = poly.vertices
     faces = poly.faces
     n_faces = size(faces, 1)

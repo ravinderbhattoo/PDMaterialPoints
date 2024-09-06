@@ -166,10 +166,10 @@ Unpack a dictionary into its components.
 - `d::Dict`: Dictionary to be unpacked.
 
 # Returns
-- `x::Array{Float64, 1}`: x coordinates.
-- `v::Array{Float64, 1}`: v coordinates.
-- `y::Array{Float64, 1}`: y coordinates.
-- `volume::Array{Float64, 1}`: Volume of the material-point-geometry.
+- `x::Array{QF, 1}`: x coordinates.
+- `v::Array{QF, 1}`: v coordinates.
+- `y::Array{QF, 1}`: y coordinates.
+- `volume::Array{QF, 1}`: Volume of the material-point-geometry.
 - `type::Array{Int, 1}`: Type of the material-point-geometry.
 """
 function unpack(d::Dict)

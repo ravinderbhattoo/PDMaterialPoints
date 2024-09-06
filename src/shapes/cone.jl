@@ -2,13 +2,13 @@
 export create, Cone, StandardCone
 
 """
-    Cone(radius::AbstractFloat, length::AbstractFloat)
+    Cone(radius::QF, length::QF)
 
 Cone shape.
 
 # Fields
-- `radius::AbstractFloat`: Radius of the cone.
-- `length::AbstractFloat`: Length of the cone.
+- `radius::QF`: Radius of the cone.
+- `length::QF`: Length of the cone.
 
 # Example
 ```julia
@@ -31,8 +31,8 @@ mpg =create(cone; resolution=0.1, rand_=0.01, type=1)
 
 """
 mutable struct Cone <: Shape
-    radius::AbstractFloat
-    length::AbstractFloat
+    radius::QF
+    length::QF
 end
 
 function Base.show(io::IO, x::Cone)
@@ -117,5 +117,5 @@ function create(c::Cone; resolution=nothing, rand_=0.0, type::Int=1)
 
     mask = vec(sum(X.^2, dims=1) .<= ((length_ .- z)./length_.*radius).^2)
     mpg =x[:, mask]
-    return Dict(:x => mpg, :v => 0*mpg, :y => copy(mpg), :volume => vol[mask], :type => type*ones(Int, sum(mask)))
+    return Dict(:x => mpg, :v => 0* ( dimension(eltype(mpg))==dimension(1u"m") ? (mpg / 1u"s") : mpg), :y => copy(mpg), :volume => vol[mask], :type => type*ones(Int, sum(mask)))
 end

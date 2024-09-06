@@ -1,5 +1,10 @@
 using PDMaterialPoints
 
+function write2downloads(filename, out)
+    filepath = joinpath(homedir(), "Downloads", "MaterialPoints_examples", filename)
+    write_data(filepath, out)
+end
+
 println("Creating a composite...")
 function rand_(a, b)
     return a + rand()*(b-a)
@@ -14,8 +19,7 @@ for i in 1:100
 end
 
 out = create(obj, resolution=0.1, rand_=0.0, type=1)
-write_data("./output/composite.data", out)
-
+write2downloads("composite.data", out)
 
 println("Creating rotating strip...")
 c = Cuboid([-5 5; -10 10; 0 3])
@@ -31,4 +35,4 @@ for i in 1:100
 end
 
 out = create(obj, resolution=1.0, rand_=0.0, type=1)
-write_data("./output/strip.data", out)
+write2downloads("strip.data", out)

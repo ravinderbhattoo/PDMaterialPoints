@@ -1,5 +1,6 @@
 module PDMaterialPoints
 using CUDA
+using Unitful
 # Write your package code here.
 
 const DEVICE = Ref{Symbol}(:cpu)
@@ -55,6 +56,13 @@ Reset the device to `:cuda`. If CUDA is not available, then the device is set to
 """
 function reset_cuda()
     set_device(:cuda)
+end
+
+# define some types
+QF = Union{Float64, Unitful.Quantity{Float64, D, U} where {D, U}}
+
+function Base.convert(::Type{Union{Float64, Quantity{Float64}}}, x::Union{Int, Quantity{Int}})
+    Float64(x)
 end
 
 include("./shapes/shape.jl")

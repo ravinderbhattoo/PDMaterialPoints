@@ -14,10 +14,11 @@ function fhandle(filename::String)
     return open(filename, "w+")
 end
 
-function write_data(filename::String, args...; kwargs...)
-    objs = sum(args...)
-    write_data(filename, objs; kwargs...)
-end
+# For multiple shapes
+# function write_data(filename::String, args...; kwargs...)
+#     objs = sum(args...)
+#     write_data(filename, objs; kwargs...)
+# end
 
 
 """
@@ -141,6 +142,7 @@ position is the particle position, and volume is the particle volume.
 """
 function write_data_peridigm(filename::String, x::Matrix, type::Vector,  vol::Vector)
     file = fhandle(filename)
+    x, type, vol = ustrip(x), ustrip(type), ustrip(vol)
     N = size(x, 2)
     write(file, "$N \n# position, type, volume\n")
     for j in 1:size(x, 2)
@@ -184,6 +186,7 @@ volume is the particle volume.
 """
 function write_data(filename::String, x::Matrix, v::Matrix, type::Vector,  vol::Vector)
     file = fhandle(filename)
+    x, v, type, vol = ustrip(x), ustrip(v), ustrip(type), ustrip(vol)
     N = size(x, 2)
     write(file, "$N \n# id, type, position, velocity, volume\n")
     for j in 1:size(x, 2)
