@@ -73,6 +73,11 @@ out = create(obj, resolution=0.1, rand_=0.0, type=1)
 write_data("./output/notched_bar.data", out)
 ```
 
+```@raw html
+<img src="assets/examples/bar.png" style="width:80%;background-color:white;display:block;margin:auto"/>
+```
+
+
 ## Composite
 In this example, a [`Cuboid`](@ref) is created initially and then its type is modified using the [`changetype`](@ref) function inside the for loop.
 
@@ -98,6 +103,10 @@ end
 
 out = create(obj, resolution=0.1, rand_=0.0, type=1)
 write_data("./output/composite.data", out)
+```
+
+```@raw html
+<img src="assets/examples/composite.png" style="width:80%;background-color:white;display:block;margin:auto"/>
 ```
 
 ## Rotating composite strip
@@ -128,4 +137,8 @@ end
 
 out = create(obj, resolution=0.5, rand_=0.0, type=1)
 write_data("./output/strip.data", out)
+```
+
+```@raw html
+<img src="assets/examples/rotating_strip.png" style="width:80%;background-color:white;display:block;margin:auto"/>
 ```
